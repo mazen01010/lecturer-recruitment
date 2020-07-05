@@ -2,6 +2,7 @@
 require(dirname(dirname(dirname(dirname(__FILE__)))) . '/config.php');
 require_login();
 include('../tables/tablerecruitmentprocess.php');
+include_once('../table.php');
 
 global $DB, $PAGE, $OUTPUT, $CFG , $USER;
 

@@ -1,34 +1,58 @@
 <?php
-class TileContainer {
+class TileContainer
+{
 
-    public $tiles =[];
+    public $tiles;
 
-    public function addTile( CreateTile $tile) {
+    public function addTile(CreateTile $tile)
+    {
         $this->tiles[] = $tile;
     }
-    public function render() {
+    public function render()
+    {
         $tiles = $this->tiles;
-        echo '<div class="d-flex flex-wrap p-2 bd-highlight"></div>
-              <div class="container ">
-              <div class="row  justify-content-left">
-              <div class="card-deck col-sm-12 text-center">';
-        foreach ($tiles as $tile=>$val){
-            echo '<div class="card mb-4  shadow-sm text-dark bg-light" style="min-width: 23%; height : 270px;">';
-            echo '<div class="card-header btn-outline-'.$val->color.'">';
-            echo '<h4 class="my-0 font-weight-normal">'.$val->title.'</h4> </div>';
-            echo '<div class="card-body ">
-                        <ul class="list-unstyled mt-3 mb-4 h-50">';
+        $count = count($tiles);
+        $iterations = (int) ($count / 3) + 1;
+        $counter = 0;
+        $countdown = $count;
 
-            echo'</ul>
-                        <form action="'.$val->buttonURL.'">
-                        <button type="submit"  class="btn btn-lg btn-block btn-'.$val->color.'"> <i class="'.$val->buttonIcon.'"></i> '.$val->buttonName.' </button>
-                        </form>
-                    </div>
-                    </div>';
+        for ($i = 0; $i < $iterations; $i++) {
+
+            try {
+
+
+
+                echo '</br>
+             
+             <div class=" justify-content-center">
+             <div class="row text-center  justify-content-center">';
+                for ($j = 0; $j < 3; $j++) {
+                    if (!isset($tiles[$counter])) {
+                        break;
+                    }
+                    echo '<div class="col-lg-4">';
+                    echo '<div class="card shadow mb-4 text-dark bg-light" style="min-width: 320px; height : 260px;">';
+                    echo '<div class="card-header btn-outline-' . $tiles[$counter]->color . '">';
+                    echo '<h4 class="my-0 font-weight-normal">' . $tiles[$counter]->title . '</h4> </div>';
+                    echo '<div class="card-body">
+                       <ul class="list-unstyled mt-2 mb-4 h-50">';
+                    foreach ($tiles[$counter]->listElement as $element) {
+                        echo '<li>' . $element . '</li>';
+                    }
+                    echo '</ul>
+                       <form action="' . $tiles[$counter]->buttonURL . '">
+                       <button type="submit"  class="btn btn-lg btn-block btn-' . $tiles[$counter]->color . '"> <i class="' . $tiles[$counter]->buttonIcon . '"></i> ' . $tiles[$counter]->buttonName . ' </button>
+                       </form>
+                   </div>
+                   </div></div>';
+                    $counter++;
+                }
+                echo '</div></div> ';
+            } catch (Exception $e) {
+            }
         }
-        echo '</div></div></div> ';
     }
-}
+};
 
 /* This class creates Bootstrap Cards (Tiles)*/
 
