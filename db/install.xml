@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/lecrec/db" VERSION="20200705" COMMENT="XMLDB file for Moodle local/lecrec"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+      <TABLE NAME="local_lecrec" COMMENT="Default comment for local_lecrec, please edit me">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="lr_company" COMMENT="lr_company table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="street" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="postalcode" TYPE="int" LENGTH="9" NOTNULL="true" DEFAULT="" SEQUENCE="false"/>
+        <FIELD NAME="city" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="state" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="pk" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="lr_lecturer" COMMENT="lr_lecturer table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="mdl_user_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="lastname" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="firstname" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="title" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="dateofbirth" TYPE="text" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="self_employed" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="" SEQUENCE="false"/>
+        <FIELD NAME="private_street" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="private_postalcode" TYPE="int" LENGTH="9" NOTNULL="true" DEFAULT="" SEQUENCE="false"/>
+        <FIELD NAME="private_city" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="private_state" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="private_phonenumber" TYPE="int" LENGTH="9" NOTNULL="true" DEFAULT="" SEQUENCE="false"/>
+        <FIELD NAME="private_cellphone_number" TYPE="int" LENGTH="9" NOTNULL="true" DEFAULT="" SEQUENCE="false"/>
+        <FIELD NAME="private_mail" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="company_id" TYPE="int" LENGTH="9" NOTNULL="true" DEFAULT="" SEQUENCE="false"/>
+        <FIELD NAME="business_phonenumber" TYPE="int" LENGTH="9" NOTNULL="true" DEFAULT="" SEQUENCE="false"/>
+        <FIELD NAME="business_mail" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="previous_teaching_activities" TYPE="char" LENGTH="500" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="professional_activities" TYPE="char" LENGTH="500" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="educational_interest" TYPE="char" LENGTH="500" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="subject_area" TYPE="char" LENGTH="500" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="pk" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="fk_mdl_user_id" TYPE="foreign" FIELDS="mdl_user_id" REFTABLE="mdl_user" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="lr_subjects" COMMENT="lr_subjects table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="lr_subject_name" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lr_description" TYPE="char" LENGTH="455" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lr_teaching_hours" TYPE="int" LENGTH="9" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="pk" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="lr_corporate_partner" COMMENT="lr_corporate_partner table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="contact" TYPE="int" LENGTH="9" NOTNULL="true" DEFAULT="" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="pk" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="lr_dean_of_studies" COMMENT="lr_dean_of_studies table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="true"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="pk" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="lr_course_room" COMMENT="lr_course_room table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="number_room" TYPE="int" LENGTH="9" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="building" TYPE="char" LENGTH="1" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="pk" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="lr_course" COMMENT="lr_course table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="dean_of_studies_id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="pk" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="dean_of_studies_id" TYPE="foreign" FIELDS="dean_of_studies_id" REFTABLE="lr_dean_of_studies" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="lr_lecture" COMMENT="lr_lecture table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="9" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="course_room_id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="lecturer_id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="lecturer_data" TYPE="int" LENGTH="9" NOTNULL="true" DEFAULT="" SEQUENCE="false"/>
+        <FIELD NAME="number_of_students" TYPE="int" LENGTH="9" NOTNULL="true" DEFAULT="" SEQUENCE="false"/>
+        <FIELD NAME="start_date" TYPE="text" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="description" TYPE="char" LENGTH="500" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="subject_area" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="language" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="semester" TYPE="int" LENGTH="9" NOTNULL="true" DEFAULT="" SEQUENCE="false"/>
+        <FIELD NAME="number_of_ects" TYPE="int" LENGTH="9" NOTNULL="true" DEFAULT="" SEQUENCE="false"/>
+        <FIELD NAME="number_of_hours" TYPE="int" LENGTH="9" NOTNULL="true" DEFAULT="" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="pk" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="fk_lecturer_id" TYPE="foreign" FIELDS="lecturer_id" REFTABLE="lr_lecturer" REFFIELDS="id"/>
+        <KEY NAME="fk_course_room_id" TYPE="foreign" FIELDS="course_room_id" REFTABLE="lr_course_room" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="lr_student" COMMENT="lr_student table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="firstname" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="lastname" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="company_id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="pk" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="fk_company_id" TYPE="foreign" FIELDS="company_id" REFTABLE="lr_company" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="lr_is_corporate_partner" COMMENT="lr_is_corporate_partner table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="company_id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="corporate_partner_id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="pk" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="fk_company_id" TYPE="foreign" FIELDS="company_id" REFTABLE="lr_company" REFFIELDS="id"/>
+        <KEY NAME="fk_corporate_partner_id" TYPE="foreign" FIELDS="corporate_partner_id" REFTABLE="lr_corporate_partner" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="lr_job_postings" COMMENT="lr_job_postings table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="external" TYPE="int" LENGTH="2" NOTNULL="false" DEFAULT="1" SEQUENCE="false"/>
+        <FIELD NAME="description" TYPE="char" LENGTH="455" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="expected_hours" TYPE="int" LENGTH="9" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lr_subjects_id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="start_date" TYPE="datetime" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="end_date" TYPE="datetime" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="director_id" TYPE="int" LENGTH="9" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="contact_person" TYPE="int" LENGTH="9" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="pk" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="fk_lr_subjects_id" TYPE="foreign" FIELDS="lr_subjects_id" REFTABLE="lr_subjects" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="lr_posting_assignment" COMMENT="lr_lecturer_posting_assignment table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="lr_lecturer_id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="lr_job_postings_id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="pk" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="fk_lr_lecturer_id" TYPE="foreign" FIELDS="lr_lecturer_id" REFTABLE="lr_lecturer" REFFIELDS="id"/>
+        <KEY NAME="fk_lr_job_postings_id" TYPE="foreign" FIELDS="lr_job_postings_id" REFTABLE="lr_job_postings" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="lr_application" COMMENT="lr_application table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="closed" TYPE="int" LENGTH="2" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="status_of_application" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lr_job_postings_id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="fname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="email" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="title" TYPE="char" LENGTH="45" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="date_of_birth" TYPE="datetime" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="place_of_birth" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="job" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="private_add_str" TYPE="char" LENGTH="455" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="private_add_zip" TYPE="int" LENGTH="9" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="private_add_city" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="private_tele" TYPE="int" LENGTH="9" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="private_mobile" TYPE="int" LENGTH="9" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="private_email" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="private_fax" TYPE="int" LENGTH="9" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="company" TYPE="char" LENGTH="455" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="company_add_str" TYPE="char" LENGTH="455" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="company_add_zip" TYPE="int" LENGTH="9" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="company_add_city" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="company_tele" TYPE="int" LENGTH="9" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="company_fax" TYPE="int" LENGTH="9" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="company_email" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="education" TYPE="char" LENGTH="455" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="teaching_activities" TYPE="char" LENGTH="455" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="job_activities" TYPE="char" LENGTH="455" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="subject_of_interest" TYPE="char" LENGTH="455" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="pk" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="fk_lr_job_postings_id" TYPE="foreign" FIELDS="lr_job_postings_id" REFTABLE="lr_job_postings" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="lr_has_lectures" COMMENT="lr_has_lectures table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="course_id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="lecture_id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="pk" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="fk_course_id" TYPE="foreign" FIELDS="course_id" REFTABLE="course" REFFIELDS="id"/>
+        <KEY NAME="fk_lecturer_id" TYPE="foreign" FIELDS="lecture_id" REFTABLE="lecture" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="lr_course_attendance" COMMENT="lr_course_attendance table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="course_id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="student_id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="pk" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="fk_course_id" TYPE="foreign" FIELDS="course_id" REFTABLE="course" REFFIELDS="id"/>
+        <KEY NAME="fk_student_id" TYPE="foreign" FIELDS="student_id" REFTABLE="student" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="lr_subj_field_asgnmt" COMMENT="lr_subjects_field_assignments table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="lr_subjects_id" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="pk" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="fk_lr_subjects_id" TYPE="foreign" FIELDS="lr_subjects_id" REFTABLE="subjects" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="changeme" COMMENT="Default comment for the table, please edit me">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>
