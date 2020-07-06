@@ -19,14 +19,14 @@ if(has_capability('local/lecrec:manager', $context)){
 
     $PAGE->set_heading('Lecturer Recruitment');
     $PAGE->navbar->add('Lecturer Recruitment',new moodle_url('/local/lecrec/index.php', array('id' => $user)));
-    $PAGE->navbar->add('Lecturer Pool',new moodle_url('/local/lecrec/lecturerpool.php', array('id' => $user)));
+    $PAGE->navbar->add('Lecturer Pool',new moodle_url('/local/lecrec/pages/lecturerpool.php', array('id' => $user)));
 
     echo $OUTPUT->header();
     echo $OUTPUT->heading('Pool of available lecturers');
 
-    $attributes = array("lastname", "firstname", "professional_activities", "subject_area");
-    $head = array("Lastname", "Firstname", "Professional Activities", "Subject Area");
-    $align = array("center", "center", "center", "center");
+    $attributes = array("id", "lastname", "firstname", "professional_activities", "subject_area");
+    $head = array("ID", "Lastname", "Firstname", "Professional Activities", "Subject Area");
+    $align = array("center", "center", "center", "center", "center");
     $equals = array("");
 
 
