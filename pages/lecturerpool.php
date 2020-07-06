@@ -5,7 +5,7 @@ require_login();
 
 include('../table.php');
 
-global $DB, $PAGE, $OUTPUT, $CFG , $USER;
+global $DB, $PAGE, $OUTPUT, $CFG, $USER;
 
 $PAGE->set_context(context_system::instance());
 $PAGE->set_url('/local/lecrec/pages/lecturerpool.php');
@@ -15,11 +15,11 @@ $PAGE->requires->jquery();
 $context = context_system::instance();
 $user = $USER->id;
 
-if(has_capability('local/lecrec:manager', $context)){
+if (has_capability('local/lecrec:manager', $context)) {
 
     $PAGE->set_heading('Lecturer Recruitment');
-    $PAGE->navbar->add('Lecturer Recruitment',new moodle_url('/local/lecrec/index.php', array('id' => $user)));
-    $PAGE->navbar->add('Lecturer Pool',new moodle_url('/local/lecrec/lecturerpool.php', array('id' => $user)));
+    $PAGE->navbar->add('Lecturer Recruitment', new moodle_url('/local/lecrec/index.php', array('id' => $user)));
+    $PAGE->navbar->add('Lecturer Pool', new moodle_url('/local/lecrec/lecturerpool.php', array('id' => $user)));
 
     echo $OUTPUT->header();
     echo $OUTPUT->heading('Pool of available lecturers');
@@ -32,38 +32,35 @@ if(has_capability('local/lecrec:manager', $context)){
 
     getTable("lr_lecturer", $attributes, $head, $align, "", $equals);
     echo $OUTPUT->footer();
-
-}else {
+} else {
     redirect($CFG->wwwroot);
 }
 ?>
 <script>
-    $(function(){
-        $('#my-table tr[record_id] td').each(function(){
-            $(this).css('cursor','pointer').hover(
-                function(){
+    $(function() {
+        $('#my-table tr[record_id] td').each(function() {
+            $(this).css('cursor', 'pointer').hover(
+                function() {
                     $(this).addClass('active');
                 },
-                function(){
+                function() {
 
 
                     $(this).removeClass('active');
-                }).click( function(){
-                    var ID = $(this).attr('record_id');
-                    redirectUrl = 'ST_process_update.php';
-                    var form = $('<form action="' + redirectUrl + '" method="post">' +
-                        '<input type="hidden" name="ID" value="' + ID + '"></input>' + '</form>');
-                    $('body').append(form);
-                    $(form).submit();
+                }).click(function() {
+                var ID = $(this).attr('record_id');
+                redirectUrl = 'ST_process_update.php';
+                var form = $('<form action="' + redirectUrl + '" method="post">' +
+                    '<input type="hidden" name="ID" value="' + ID + '"></input>' + '</form>');
+                $('body').append(form);
+                $(form).submit();
 
-                }
-            );
+            });
         });
     });
-    if ($_SERVER['REQUEST_METHOD']=='POST') {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $input = filter_input_array(INPUT_POST);
     } else {
         $input = filter_input_array(INPUT_GET);
     };
 </script>
-
