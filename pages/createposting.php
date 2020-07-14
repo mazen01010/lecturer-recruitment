@@ -3,13 +3,13 @@ global $PAGE;
 require(dirname(dirname(dirname(dirname(__FILE__)))) . '/config.php');
 require_once("$CFG->libdir/formslib.php");
 $PAGE->set_context(context_system::instance());
-$PAGE->set_url('/local/lecrec/pages/testpage.php');
+$PAGE->set_url('/local/lecrec/pages/createposting.php');
 $PAGE->set_title('Lecturer Recruitment');
 
 $context = context_system::instance();
 $user = $USER->id;
 
-$PAGE->set_heading("Testpage");
+$PAGE->set_heading("Create a job posting");
 
 
 class createposting extends moodleform {
@@ -23,9 +23,7 @@ class createposting extends moodleform {
 
         $sql = "SELECT `name` FROM `mdl_lr_module`";
         $records = $DB->get_records_sql($sql);
-        var_dump($records);
         $arr = json_decode(json_encode($records), TRUE);
-        var_dump($arr);
         $testarray= [];
         foreach ($arr as $item){
             foreach ($item as $i){
@@ -34,7 +32,6 @@ class createposting extends moodleform {
         }
 
         $mform->addElement('select','module', 'Module', $testarray);
-
 
         $mform->addElement('text', 'lecture', 'Lecture', 'size="50"'); // Add elements to your form
         $mform->setType('lecture', PARAM_NOTAGS);                   //Set type of element
@@ -52,27 +49,44 @@ class createposting extends moodleform {
 
         $mform->addElement('text', 'emailcontactperson', 'E-Mail Contact Person', 'size="50"');
         $mform->setType('emailcontactperson', PARAM_NOTAGS);
+
+        $buttonarray=array();
+        $buttonarray[] = $mform->createElement('submit', 'submitbutton','Save');
+        $buttonarray[] = $mform->createElement('reset', 'resetbutton','Revert');
+        $buttonarray[] = $mform->createElement('cancel');
+        $mform->addGroup($buttonarray, 'buttonar', '', ' ', false);
     }
     //Custom validation should be added here
     function validation($data, $files) {
         return array();
     }
 }
-$sql = "SELECT * FROM `mdl_lr_module` WHERE 1";
-$records = $DB->get_records_sql($sql);
-$arr = json_decode(json_encode($records), TRUE);
 
 echo $OUTPUT->header();
 
-$form = new createposting();
-$form->display();
 
+$mform = new createposting();
+$mform->display();
+
+
+if ($mform->is_cancelled()) {
+    //Handle form cancel operation, if cancel button is present on form
+    $url = new moodle_url($CFG->wwwroot.'/local/lecrec/index.php');
+    redirect($url);
+
+}
+/*else if ($fromform = $mform->get_data()) {
+    //In this case you process validated data. $mform->get_data() returns data posted in form.
+} else {
+    // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
+    // or on the first display of the form.
+
+    //Set default data (if any)
+    $mform->set_data($toform);
+    //displays the form
+    $mform->display();
+}
+*/
 echo $OUTPUT->footer();
 
 ?>
-<script>
-    $(document).ready(function () {
-        $('#text_value')
-
-    })
-</script>
