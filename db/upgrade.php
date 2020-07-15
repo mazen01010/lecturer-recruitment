@@ -604,4 +604,3 @@ function xmldb_local_lecrec_upgrade($oldversion)
 
 
     return true;
-}
