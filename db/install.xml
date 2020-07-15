@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <XMLDB PATH="local/lecrec/db" VERSION="20200714" COMMENT="XMLDB file for Moodle local/lecrec"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
     <TABLE NAME="dg_company" COMMENT="dg_company table retrofitted from MySQL">
@@ -24,13 +24,13 @@
         <FIELD NAME="dateofbirth" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="self_employed" TYPE="int" LENGTH="2" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="private_street" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false"/>
-        <FIELD NAME="private_postalcode" TYPE="int" LENGTH="9" NOTNULL="false"  SEQUENCE="false"/>
+        <FIELD NAME="private_postalcode" TYPE="int" LENGTH="9" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="private_city" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="private_state" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="private_phonenumber" TYPE="int" LENGTH="9" NOTNULL="false"  SEQUENCE="false"/>
         <FIELD NAME="private_cellphone_number" TYPE="int" LENGTH="9" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="private_mail" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false"/>
-        <FIELD NAME="company_id" TYPE="int" LENGTH="9" NOTNULL="false" DEFAULT="" SEQUENCE="false"/>
+        <FIELD NAME="company_id" TYPE="int" LENGTH="9" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="business_phonenumber" TYPE="int" LENGTH="9" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="business_mail" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="previous_teaching_activities" TYPE="char" LENGTH="500" NOTNULL="false" SEQUENCE="false"/>
