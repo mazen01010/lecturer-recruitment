@@ -4,15 +4,16 @@ require(dirname(dirname(dirname(dirname(__FILE__)))) . '/config.php');
 include('../tables/tableteachingpostings.php');
 
 
-
 $PAGE->set_title('Lecturer Recruitment');
 $PAGE->set_context(context_system::instance());
 $PAGE->set_url('/local/lecrec/pages/teachingpostings.php');
-//$PAGE->set_title('Lecturer Recruitment');
+$PAGE->set_title('Lecturer Recruitment');
 $PAGE->requires->css('/local/lecrec/assets/css/bewerber.css');
+$PAGE->requires->css('/local/lecrec/assets/css/jquery.dataTables.min.css');
+$PAGE->requires->jquery();
+$PAGE->requires->js('/local/lecrec/assets/js/jquery.dataTables.min.js', true);
 echo $OUTPUT->header();
 echo $OUTPUT->heading('DHBW Mannheim Postings');
-$PAGE->requires->jquery();
 $context = context_system::instance();
 $user = $USER->id;
 echo '</br>';
@@ -22,10 +23,9 @@ if (has_capability('local/lecrec:manager', $context)) {
 if (isguestuser()) {
 }
 
-
 $table = new html_table();
-$table->id = 'my-table';
-$table->attributes['class'] = 'table table-striped table-xl';
+$table->id = 'postings';
+//$table->attributes['class'] = 'table table-striped table-xl';
 $records = $DB->get_records_select("lr_job_postings", '');
 
 $table->head = array('Vorlesung', 'Beschreibung', 'Qualifikation', 'Bedarf', 'Stunden pro Semester');
@@ -51,34 +51,25 @@ foreach ($records as $record) {
     $cell3->text = 'Bachelor in MINT Fach';
 
     $cell4 = new html_table_cell();
-    $cell4->style = "min-width: 5%;";
-    $cell4->text = 'From ' . date('Y-m-d', strtotime($record->start_date)) . ' To ' .  date('Y-m-d', strtotime($record->end_date));
+    // $cell4->style = "min-width: 5%;";
+    $cell4->text = 'From ' . date('Y-m-d', strtotime($record->start_date)) . ' To ' . date('Y-m-d', strtotime($record->end_date));
     $cell5 = new html_table_cell();
 
     $cell5->text = $record->expected_hours;
 
-    $row->cells  = array($cell1, $cell2, $cell3, $cell4, $cell5);
+    $row->cells = array($cell1, $cell2, $cell3, $cell4, $cell5);
     $table->rowclasses[$record->id] = '';
-    $table->data[]  = $row;
+    $table->data[] = $row;
 };
 
 echo html_writer::table($table);
 
 ?>
 
-<script src="../assets/js/jquery-3.5.1.min.js"></script>
 <script>
     $(function() {
-        $('#my-table tr[RecordID] td').each(function() {
-            $(this).css('cursor', 'pointer').hover(
-                function() {
-                    $(this).addClass('active');
-                },
-                function() {
-
-
-                    $(this).removeClass('active');
-                }).click(function() {
+        $('#postings tr[RecordID] td').each(function() {
+            $(this).css('cursor', 'pointer').click(function() {
                 var ID = $(this).parent().children(":first").html();
                 var rowID = $(this).parent().attr('RecordID');
                 redirectUrl = 'postings.php';
@@ -87,10 +78,10 @@ echo html_writer::table($table);
                     '<input type="hidden" name="ID" value="' + ID + '"></input>' + '</form>');
                 $('body').append(form);
                 $(form).submit();
-
             });
-
-
         });
+    });
+    $(document).ready(function() {
+        $('#postings').DataTable();
     });
 </script>

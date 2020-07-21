@@ -89,3 +89,4 @@ echo ' <header>
 <div id="lr_job_postings_id" name="lr_job_postings_id" hidden>' . $rowID . '</div>
 </div>
 </form>';
+?>
