@@ -26,6 +26,6 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_lecrec';
 $plugin->release = '0.1.0';
-$plugin->version = 2020062307;
+$plugin->version = 2020062308;
 $plugin->requires = 2019052000;
 $plugin->maturity = MATURITY_ALPHA;
