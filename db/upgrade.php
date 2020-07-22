@@ -46,7 +46,7 @@ function xmldb_local_lecrec_upgrade($oldversion)
     // Documentation for the XMLDB Editor can be found at:
     // https://docs.moodle.org/dev/XMLDB_editor
 
-    if ($oldversion < 2020062309) {
+    if ($oldversion < 2020062310) {
 
         // Define field sr_course_id to be added to lr_job_postings.
         $table = new xmldb_table('lr_job_postings');
@@ -81,9 +81,64 @@ function xmldb_local_lecrec_upgrade($oldversion)
             $dbman->create_table($table);
         }
 
+        // Define field cp_name to be dropped from lr_job_postings.
+        $table = new xmldb_table('lr_job_postings');
+        $field = new xmldb_field('contact_person');
+
+        // Conditionally launch drop field cp_name.
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+        $field = new xmldb_field(
+            'cp_name',
+            XMLDB_TYPE_CHAR,
+            '255',
+            null,
+            null,
+            null,
+            null,
+            'director_id'
+        );
+
+        // Conditionally launch add field cp_name.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        $field = new xmldb_field(
+            'cp_email',
+            XMLDB_TYPE_CHAR,
+            '255',
+            null,
+            null,
+            null,
+            null,
+            'cp_name'
+        );
+
+        // Conditionally launch add field cp_email.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        $field = new xmldb_field(
+            'cp_phone',
+            XMLDB_TYPE_INTEGER,
+            '10',
+            null,
+            null,
+            null,
+            null,
+            'cp_email'
+        );
+
+        // Conditionally launch add field cp_phone.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
 
         // Lecrec savepoint reached.
-        upgrade_plugin_savepoint(true, 2020062309, 'local', 'lecrec');
+        upgrade_plugin_savepoint(true, 2020062310, 'local', 'lecrec');
     }
 
 

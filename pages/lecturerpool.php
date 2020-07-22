@@ -19,8 +19,6 @@ if (has_capability('local/lecrec:manager', $context)) {
 
     $PAGE->set_heading('Lecturer Recruitment');
     $PAGE->navbar->add('Lecturer Recruitment', new moodle_url('/local/lecrec/index.php', array('id' => $user)));
-    $PAGE->navbar->add('Lecturer Pool', new moodle_url('/local/lecrec/lecturerpool.php', array('id' => $user)));
-
     echo $OUTPUT->header();
     echo $OUTPUT->heading('Pool of available lecturers');
     echo '
@@ -95,9 +93,10 @@ if (has_capability('local/lecrec:manager', $context)) {
                     $(this).removeClass('active');
                 }).click(function() {
                 var ID = $(this).attr('record_id');
-                redirectUrl = 'ST_process_update.php';
+                redirectUrl = 'lecturer_c_u_form.php';
                 var form = $('<form action="' + redirectUrl + '" method="post">' +
-                    '<input type="hidden" name="ID" value="' + ID + '"></input>' + '</form>');
+                    '<input type="hidden" name="ID" value="' + ID + '"></input>' +
+                    '<input type="hidden" name="status" value="update"></input>' + '</form>');
                 $('body').append(form);
                 $(form).submit();
 
@@ -112,8 +111,8 @@ if (has_capability('local/lecrec:manager', $context)) {
         i = 0;
         $('#my-table tr[record_id]').each(function() {
             i++;
-            $(this).append('<td id="reservationlist' + i + '" style="cursor: pointer;"><button type="button" class="btn btn-default pull-right" style="cursor: pointer;">View</button></td>');
-            $('#reservationlist' + i + '').css('cursor', 'pointer').hover(
+            $(this).append('<td id="application' + i + '" style="cursor: pointer;"><button type="button" class="btn btn-default pull-right" style="cursor: pointer;">View</button></td>');
+            $('#application' + i + '').css('cursor', 'pointer').hover(
                 function() {
                     $(this).addClass('active');
                 },
@@ -121,10 +120,10 @@ if (has_capability('local/lecrec:manager', $context)) {
 
                     $(this).removeClass('active');
                 }).click(function() {
-                var processID = $(this).parent().attr('RecordID');
-                redirectUrl = 'ST_WL_overview.php';
+                var record_id = $(this).parent().attr('record_id');
+                redirectUrl = 'view_assigned_postings.php';
                 var form = $('<form action="' + redirectUrl + '" method="post">' +
-                    '<input type="hidden" name="processID" value="' + processID + '"></input>' + '</form>');
+                    '<input type="hidden" name="record_id" value="' + record_id + '"></input>' + '</form>');
                 $('body').append(form);
                 $(form).submit();
 
