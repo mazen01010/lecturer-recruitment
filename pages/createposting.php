@@ -18,7 +18,7 @@ class createposting extends moodleform {
 
     //Add elements to form
     public function definition() {
-        global $DB;
+        global $DB, $USER;
 
         $mform = $this->_form; // Don't forget the underscore!
 
@@ -29,10 +29,7 @@ class createposting extends moodleform {
             $modules[$item->id] = $item->module_name;
         }
 
-       $mform->addElement('select','module', 'Module', $modules , array('onchange' => 'javascript:loadSubjects();'));
-
-
-
+        $mform->addElement('select','module', 'Module', $modules , array('onchange' => 'javascript:loadSubjects();'));
         $mform->addElement('select', 'subject', 'Subject',); // Add elements to your form
         $mform->setType('subject', PARAM_NOTAGS);                   //Set type of element
 

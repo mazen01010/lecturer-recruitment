@@ -46,92 +46,37 @@ function xmldb_local_lecrec_upgrade($oldversion)
     // Documentation for the XMLDB Editor can be found at:
     // https://docs.moodle.org/dev/XMLDB_editor
 
-    if ($oldversion < 2020062307) {
 
-        // Changing type of field description on table lr_job_postings to char.
+    if ($oldversion < 2020062309) {
+
+        // Define field cp_name to be dropped from lr_job_postings.
         $table = new xmldb_table('lr_job_postings');
-        $field = new xmldb_field('description', XMLDB_TYPE_CHAR, '1024', null, null, null, null, 'external');
+        $field = new xmldb_field('contact_person');
 
-        // Launch change of type for field description.
-        $dbman->change_field_type($table, $field);
+        // Conditionally launch drop field cp_name.
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
 
-        // Changing type of field lr_description on table lr_subjects to char.
-        $table = new xmldb_table('lr_subjects');
-        $field = new xmldb_field('lr_description', XMLDB_TYPE_CHAR, '1024', null, null, null, null, 'lr_subject_name');
+        $field = new xmldb_field('cp_name', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'director_id');
 
-        // Launch change of type for field lr_description.
-        $dbman->change_field_type($table, $field);
+        // Conditionally launch add field cp_name.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        $field = new xmldb_field('cp_email', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'cp_name');
 
+        // Conditionally launch add field cp_email.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        $field = new xmldb_field('cp_phone', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'cp_email');
 
-        // Lecrec savepoint reached.
-        upgrade_plugin_savepoint(true, 2020062307, 'local', 'lecrec');
-    }
-
-    if ($oldversion < 2020062308) {
-
-        $DB->delete_records('lr_subjects');
-        $DB->delete_records('lr_module');
-
-        $DB->insert_record('lr_module', array(
-            'module_identifier' => 'BWL',
-            'module_name' => 'Grundlagen der BWL'
-        ));
-
-        $DB->insert_record('lr_module', array(
-            'module_identifier' => 'Rechnungslegung',
-            'module_name' => 'Grundlagen der Rechnungslegung'
-        ));
-
-        $DB->insert_record('lr_subjects', array(
-            'lr_subject_name' => 'Einführung in die BWL',
-            'lr_description' => 'Gegenstand und Grundlagen der Betriebswirtschaftslehre - Unternehmerische Zielbildung - Planungs- und Entscheidungspro-zess im Unternehmen - Konstitutive Entscheidungen im Unternehmen - Funktionsbereiche des Unternehmens - Weitere An-sätze betriebswirtschaftlicher Aufgabenbereiche.',
-            'lr_teaching_hours' => '36',
-            'lr_module_id' => '1'
-        ));
-
-        $DB->insert_record('lr_subjects', array(
-            'lr_subject_name' => 'Determinanten des Consulting',
-            'lr_description' => 'Aufgaben eines Consultant – Schlüsselqualifikationen – Interner Consultant vs. Externer Consultant – Leistungsfelder – Grundlagen strategisches und operatives Beratungsmarketing – Kontaktphase – Akquisitionsphase – Angebotsphase – Ver-tragsgestaltung',
-            'lr_teaching_hours' => '12',
-            'lr_module_id' => '1'
-        ));
-
-        $DB->insert_record('lr_subjects', array(
-            'lr_subject_name' => 'Marketing',
-            'lr_description' => 'Begriffliche und konzeptionelle Grundlagen - verhaltenswissenschaftliche Grundlagen - Marketing-Mix - Produktpolitik - Preis- und Konditionenpolitik - Distributionspolitik - Kommunikationspolitik - Marktforschung - aktuelle Problemstellungen und neuere Entwicklungen',
-            'lr_teaching_hours' => '24',
-            'lr_module_id' => '1'
-        ));
-
-        $DB->insert_record('lr_subjects', array(
-            'lr_subject_name' => 'Kundenverhalten',
-            'lr_description' => 'Überblicksveranstaltung: Modell und Einflussfaktoren des Konsumentenverhaltens, Kaufentscheidungsprozess, Konsumen-tenverhalten im internationalen Kontext, Methodik und Didaktik im Umgang mit Kunden: Selbstkompetenz und Sozialkompe-tenz; Kommunikation und deren Modelle',
-            'lr_teaching_hours' => '12',
-            'lr_module_id' => '1'
-        ));
-
-        $DB->insert_record('lr_subjects', array(
-            'lr_subject_name' => 'Finanzbuchhaltung',
-            'lr_description' => 'Grundkonzeption des Rechnungswesens – Bilanz als Grundlage der Buchführung – Veränderungen des Eigenkapitalkontos – Organisation und Technik des Industriekontenrahmens – Buchungen im Beschaffungs-, Produktions- und Absatzbereich – System der Umsatzsteuer – Buchungen im Sachanlagenbereich – Buchungen im Personalbereich – Besondere Buchungsfälle – Abschluss im Industriebetrieb – EDV-gestützte Buchhaltung',
-            'lr_teaching_hours' => '36',
-            'lr_module_id' => '2'
-        ));
-
-        $DB->insert_record('lr_subjects', array(
-            'lr_subject_name' => 'Kosten- und Leistungsrechnung',
-            'lr_description' => 'Grundlagen der Kostenrechnung – Kostenartenrechnung – Kostenstellenrechnung – Kostenträgerrechnung –Vollkostenrechnung/Kritik – Grundlagen der Teilkosten-/Deckungsbeitragsrechnung',
-            'lr_teaching_hours' => '36',
-            'lr_module_id' => '2'
-        ));
-
-        $DB->insert_record('lr_subjects', array(
-            'lr_subject_name' => '',
-            'lr_description' => '',
-            'lr_teaching_hours' => '',
-            'lr_module_id' => ''
-        ));
-
-        upgrade_plugin_savepoint(true, 2020062308, 'local', 'lecrec');
+        // Conditionally launch add field cp_phone.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        upgrade_plugin_savepoint(true, 2020062309, 'local', 'lecrec');
     }
 
 
