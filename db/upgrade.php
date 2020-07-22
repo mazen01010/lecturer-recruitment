@@ -50,7 +50,7 @@ function xmldb_local_lecrec_upgrade($oldversion)
 
         // Define field sr_course_id to be added to lr_job_postings.
         $table = new xmldb_table('lr_job_postings');
-        $field = new xmldb_field('sr_course_id', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'contact_person');
+        $field = new xmldb_field('sr_course_id', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
 
         // Conditionally launch add field sr_course_id.
         if (!$dbman->field_exists($table, $field)) {
