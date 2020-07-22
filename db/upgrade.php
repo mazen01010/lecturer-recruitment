@@ -67,6 +67,73 @@ function xmldb_local_lecrec_upgrade($oldversion)
         upgrade_plugin_savepoint(true, 2020062307, 'local', 'lecrec');
     }
 
+    if ($oldversion < 2020062308) {
+
+        $DB->delete_records('lr_subjects');
+        $DB->delete_records('lr_module');
+
+        $DB->insert_record('lr_module', array(
+            'module_identifier' => 'BWL',
+            'module_name' => 'Grundlagen der BWL'
+        ));
+
+        $DB->insert_record('lr_module', array(
+            'module_identifier' => 'Rechnungslegung',
+            'module_name' => 'Grundlagen der Rechnungslegung'
+        ));
+
+        $DB->insert_record('lr_subjects', array(
+            'lr_subject_name' => 'Einführung in die BWL',
+            'lr_description' => 'Gegenstand und Grundlagen der Betriebswirtschaftslehre - Unternehmerische Zielbildung - Planungs- und Entscheidungspro-zess im Unternehmen - Konstitutive Entscheidungen im Unternehmen - Funktionsbereiche des Unternehmens - Weitere An-sätze betriebswirtschaftlicher Aufgabenbereiche.',
+            'lr_teaching_hours' => '36',
+            'lr_module_id' => '1'
+        ));
+
+        $DB->insert_record('lr_subjects', array(
+            'lr_subject_name' => 'Determinanten des Consulting',
+            'lr_description' => 'Aufgaben eines Consultant – Schlüsselqualifikationen – Interner Consultant vs. Externer Consultant – Leistungsfelder – Grundlagen strategisches und operatives Beratungsmarketing – Kontaktphase – Akquisitionsphase – Angebotsphase – Ver-tragsgestaltung',
+            'lr_teaching_hours' => '12',
+            'lr_module_id' => '1'
+        ));
+
+        $DB->insert_record('lr_subjects', array(
+            'lr_subject_name' => 'Marketing',
+            'lr_description' => 'Begriffliche und konzeptionelle Grundlagen - verhaltenswissenschaftliche Grundlagen - Marketing-Mix - Produktpolitik - Preis- und Konditionenpolitik - Distributionspolitik - Kommunikationspolitik - Marktforschung - aktuelle Problemstellungen und neuere Entwicklungen',
+            'lr_teaching_hours' => '24',
+            'lr_module_id' => '1'
+        ));
+
+        $DB->insert_record('lr_subjects', array(
+            'lr_subject_name' => 'Kundenverhalten',
+            'lr_description' => 'Überblicksveranstaltung: Modell und Einflussfaktoren des Konsumentenverhaltens, Kaufentscheidungsprozess, Konsumen-tenverhalten im internationalen Kontext, Methodik und Didaktik im Umgang mit Kunden: Selbstkompetenz und Sozialkompe-tenz; Kommunikation und deren Modelle',
+            'lr_teaching_hours' => '12',
+            'lr_module_id' => '1'
+        ));
+
+        $DB->insert_record('lr_subjects', array(
+            'lr_subject_name' => 'Finanzbuchhaltung',
+            'lr_description' => 'Grundkonzeption des Rechnungswesens – Bilanz als Grundlage der Buchführung – Veränderungen des Eigenkapitalkontos – Organisation und Technik des Industriekontenrahmens – Buchungen im Beschaffungs-, Produktions- und Absatzbereich – System der Umsatzsteuer – Buchungen im Sachanlagenbereich – Buchungen im Personalbereich – Besondere Buchungsfälle – Abschluss im Industriebetrieb – EDV-gestützte Buchhaltung',
+            'lr_teaching_hours' => '36',
+            'lr_module_id' => '2'
+        ));
+
+        $DB->insert_record('lr_subjects', array(
+            'lr_subject_name' => 'Kosten- und Leistungsrechnung',
+            'lr_description' => 'Grundlagen der Kostenrechnung – Kostenartenrechnung – Kostenstellenrechnung – Kostenträgerrechnung –Vollkostenrechnung/Kritik – Grundlagen der Teilkosten-/Deckungsbeitragsrechnung',
+            'lr_teaching_hours' => '36',
+            'lr_module_id' => '2'
+        ));
+
+        $DB->insert_record('lr_subjects', array(
+            'lr_subject_name' => '',
+            'lr_description' => '',
+            'lr_teaching_hours' => '',
+            'lr_module_id' => ''
+        ));
+
+        upgrade_plugin_savepoint(true, 2020062308, 'local', 'lecrec');
+    }
+
 
     return true;
 }
