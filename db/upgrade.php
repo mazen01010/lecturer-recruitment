@@ -46,92 +46,44 @@ function xmldb_local_lecrec_upgrade($oldversion)
     // Documentation for the XMLDB Editor can be found at:
     // https://docs.moodle.org/dev/XMLDB_editor
 
-    if ($oldversion < 2020062307) {
+    if ($oldversion < 2020062309) {
 
-        // Changing type of field description on table lr_job_postings to char.
+        // Define field sr_course_id to be added to lr_job_postings.
         $table = new xmldb_table('lr_job_postings');
-        $field = new xmldb_field('description', XMLDB_TYPE_CHAR, '1024', null, null, null, null, 'external');
+        $field = new xmldb_field('sr_course_id', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'contact_person');
 
-        // Launch change of type for field description.
-        $dbman->change_field_type($table, $field);
+        // Conditionally launch add field sr_course_id.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        // Define table sr_active_study_course to be created.
+        $table = new xmldb_table('sr_active_study_course');
 
-        // Changing type of field lr_description on table lr_subjects to char.
-        $table = new xmldb_table('lr_subjects');
-        $field = new xmldb_field('lr_description', XMLDB_TYPE_CHAR, '1024', null, null, null, null, 'lr_subject_name');
+        // Adding fields to table sr_active_study_course.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '18', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('study_course_name', XMLDB_TYPE_CHAR, '255', null, null, null, null);
+        $table->add_field('study_course_abbreviation', XMLDB_TYPE_CHAR, '45', null, null, null, null);
+        $table->add_field('start_date', XMLDB_TYPE_DATETIME, null, null, null, null, null);
+        $table->add_field('end_date', XMLDB_TYPE_DATETIME, null, null, null, null, null);
+        $table->add_field('sr_process_id', XMLDB_TYPE_INTEGER, '18', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('course_capacity', XMLDB_TYPE_INTEGER, '18', null, null, null, null);
+        $table->add_field('sr_employees_id', XMLDB_TYPE_INTEGER, '18', null, null, null, null);
+        $table->add_field('sr_study_fields_id', XMLDB_TYPE_INTEGER, '18', null, null, null, null);
+        $table->add_field('usermodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('timecreated', XMLDB_TYPE_DATETIME, null, null, null, null, null);
+        $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('closed', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
 
-        // Launch change of type for field lr_description.
-        $dbman->change_field_type($table, $field);
+        // Adding keys to table sr_active_study_course.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        // Conditionally launch create table for sr_active_study_course.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
 
 
         // Lecrec savepoint reached.
-        upgrade_plugin_savepoint(true, 2020062307, 'local', 'lecrec');
-    }
-
-    if ($oldversion < 2020062308) {
-
-        $DB->delete_records('lr_subjects');
-        $DB->delete_records('lr_module');
-
-        $DB->insert_record('lr_module', array(
-            'module_identifier' => 'BWL',
-            'module_name' => 'Grundlagen der BWL'
-        ));
-
-        $DB->insert_record('lr_module', array(
-            'module_identifier' => 'Rechnungslegung',
-            'module_name' => 'Grundlagen der Rechnungslegung'
-        ));
-
-        $DB->insert_record('lr_subjects', array(
-            'lr_subject_name' => 'Einführung in die BWL',
-            'lr_description' => 'Gegenstand und Grundlagen der Betriebswirtschaftslehre - Unternehmerische Zielbildung - Planungs- und Entscheidungspro-zess im Unternehmen - Konstitutive Entscheidungen im Unternehmen - Funktionsbereiche des Unternehmens - Weitere An-sätze betriebswirtschaftlicher Aufgabenbereiche.',
-            'lr_teaching_hours' => '36',
-            'lr_module_id' => '1'
-        ));
-
-        $DB->insert_record('lr_subjects', array(
-            'lr_subject_name' => 'Determinanten des Consulting',
-            'lr_description' => 'Aufgaben eines Consultant – Schlüsselqualifikationen – Interner Consultant vs. Externer Consultant – Leistungsfelder – Grundlagen strategisches und operatives Beratungsmarketing – Kontaktphase – Akquisitionsphase – Angebotsphase – Ver-tragsgestaltung',
-            'lr_teaching_hours' => '12',
-            'lr_module_id' => '1'
-        ));
-
-        $DB->insert_record('lr_subjects', array(
-            'lr_subject_name' => 'Marketing',
-            'lr_description' => 'Begriffliche und konzeptionelle Grundlagen - verhaltenswissenschaftliche Grundlagen - Marketing-Mix - Produktpolitik - Preis- und Konditionenpolitik - Distributionspolitik - Kommunikationspolitik - Marktforschung - aktuelle Problemstellungen und neuere Entwicklungen',
-            'lr_teaching_hours' => '24',
-            'lr_module_id' => '1'
-        ));
-
-        $DB->insert_record('lr_subjects', array(
-            'lr_subject_name' => 'Kundenverhalten',
-            'lr_description' => 'Überblicksveranstaltung: Modell und Einflussfaktoren des Konsumentenverhaltens, Kaufentscheidungsprozess, Konsumen-tenverhalten im internationalen Kontext, Methodik und Didaktik im Umgang mit Kunden: Selbstkompetenz und Sozialkompe-tenz; Kommunikation und deren Modelle',
-            'lr_teaching_hours' => '12',
-            'lr_module_id' => '1'
-        ));
-
-        $DB->insert_record('lr_subjects', array(
-            'lr_subject_name' => 'Finanzbuchhaltung',
-            'lr_description' => 'Grundkonzeption des Rechnungswesens – Bilanz als Grundlage der Buchführung – Veränderungen des Eigenkapitalkontos – Organisation und Technik des Industriekontenrahmens – Buchungen im Beschaffungs-, Produktions- und Absatzbereich – System der Umsatzsteuer – Buchungen im Sachanlagenbereich – Buchungen im Personalbereich – Besondere Buchungsfälle – Abschluss im Industriebetrieb – EDV-gestützte Buchhaltung',
-            'lr_teaching_hours' => '36',
-            'lr_module_id' => '2'
-        ));
-
-        $DB->insert_record('lr_subjects', array(
-            'lr_subject_name' => 'Kosten- und Leistungsrechnung',
-            'lr_description' => 'Grundlagen der Kostenrechnung – Kostenartenrechnung – Kostenstellenrechnung – Kostenträgerrechnung –Vollkostenrechnung/Kritik – Grundlagen der Teilkosten-/Deckungsbeitragsrechnung',
-            'lr_teaching_hours' => '36',
-            'lr_module_id' => '2'
-        ));
-
-        $DB->insert_record('lr_subjects', array(
-            'lr_subject_name' => '',
-            'lr_description' => '',
-            'lr_teaching_hours' => '',
-            'lr_module_id' => ''
-        ));
-
-        upgrade_plugin_savepoint(true, 2020062308, 'local', 'lecrec');
+        upgrade_plugin_savepoint(true, 2020062309, 'local', 'lecrec');
     }
 
 

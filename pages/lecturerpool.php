@@ -70,8 +70,6 @@ if (has_capability('local/lecrec:manager', $context)) {
         $cell6 = new html_table_cell();
         $cell6->text = $record->company_name;
 
-
-
         $row->cells  = array($cell1, $cell2, $cell3, $cell4, $cell5, $cell6);
 
         $table->rowclasses[$record->id] = '';
@@ -106,11 +104,36 @@ if (has_capability('local/lecrec:manager', $context)) {
             });
         });
     });
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $input = filter_input_array(INPUT_POST);
-    } else {
-        $input = filter_input_array(INPUT_GET);
-    };
+
+    $(function() {
+
+        $('#my-table thead tr').append('<td class="pull-right"><b>View Applications</b></td>');
+
+        i = 0;
+        $('#my-table tr[record_id]').each(function() {
+            i++;
+            $(this).append('<td id="reservationlist' + i + '" style="cursor: pointer;"><button type="button" class="btn btn-default pull-right" style="cursor: pointer;">View</button></td>');
+            $('#reservationlist' + i + '').css('cursor', 'pointer').hover(
+                function() {
+                    $(this).addClass('active');
+                },
+                function() {
+
+                    $(this).removeClass('active');
+                }).click(function() {
+                var processID = $(this).parent().attr('RecordID');
+                redirectUrl = 'ST_WL_overview.php';
+                var form = $('<form action="' + redirectUrl + '" method="post">' +
+                    '<input type="hidden" name="processID" value="' + processID + '"></input>' + '</form>');
+                $('body').append(form);
+                $(form).submit();
+
+            });
+
+        });
+
+
+    });
 </script>
 
 

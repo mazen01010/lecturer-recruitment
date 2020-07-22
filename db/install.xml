@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/lecrec/db" VERSION="20200716" COMMENT="XMLDB file for Moodle local/lecrec"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+<XMLDB PATH="local/lecrec/db" VERSION="20200722" COMMENT="XMLDB file for Moodle local/lecrec"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
     <TABLE NAME="dg_company" COMMENT="dg_company table retrofitted from MySQL">
@@ -79,6 +79,7 @@
         <FIELD NAME="end_date" TYPE="datetime" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="director_id" TYPE="int" LENGTH="9" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="contact_person" TYPE="int" LENGTH="9" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="sr_course_id" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="pk" TYPE="primary" FIELDS="id"/>
