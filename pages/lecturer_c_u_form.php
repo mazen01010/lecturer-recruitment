@@ -36,7 +36,7 @@ if ($input['status'] == 'update') {
     );
 } else {
     $data = array(
-        'lastname' => '', 'firstname' => null, 'title' => null, 'dateofbirth' => null,
+        'lastname' => null, 'firstname' => null, 'title' => null, 'dateofbirth' => null,
         'self_employed' => null, 'private_street' => null, 'private_postalcode' => null, 'private_city' => null,
         'private_state' => null, 'private_phonenumber' => null, 'private_cellphone_number' => null, 'private_mail' => null,
         'company' => null, 'business_phonenumber' => null, 'business_mail' => null, 'previous_teaching_activities' => null,
@@ -69,7 +69,7 @@ class addlecturer extends moodleform
         $mform->addElement('text', 'firstname', 'First Name', 'size="50"')->setValue($values->firstname);
         $mform->setType('firstname', PARAM_NOTAGS);
         $mform->addElement('date_selector', 'dateofbirth', 'Date of Birth ')->setValue($values->dateofbirth);
-        $mform->addElement('advcheckbox', 'self_employed', 'Self Employed', 'Check if self employed', '', array(0, 1))->setValue($data->self_employed);
+        $mform->addElement('advcheckbox', 'self_employed', 'Self Employed', 'Check if self employed', '', array(0, 1))->setValue($values->self_employed);
         $private_address = array();
         $mform->addGroup($private_address, null, 'Private Data', null, false);
         $mform->addElement('text', 'private_street', 'Street and Nr.', 'size="50"')->setValue($values->private_street);
@@ -152,7 +152,6 @@ class addlecturer extends moodleform
 
 
 $mform = new addlecturer();
-$mform->values = $data;
 $mform->display();
 
 
