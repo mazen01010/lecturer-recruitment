@@ -16,7 +16,7 @@ require_once(dirname(dirname(dirname(dirname(__DIR__)))) . '/config.php');
 global $DB, $USER;
 
 $user =  $USER->id;
-
+/*
 function  notify_cr(string $cr)
 {
     try {
@@ -46,8 +46,9 @@ function  notify_cr(string $cr)
     } catch (\Exception $e) {
         echo $e;
     }
-}
-notify_cr($input['fname']);
+}*/
+//notify_cr($input['fname']);
+
 $id = $DB->insert_record("lr_application", array(
     'lr_job_postings_id' => $input['lr_job_postings_id'],
     'fname' => $input['fname'], 'lname' => $input['lname'], 'email' =>
@@ -56,19 +57,24 @@ $id = $DB->insert_record("lr_application", array(
     $input['date_of_birth'], 'place_of_birth' =>
     $input['place_of_birth'], 'job' =>
     $input['job'], 'private_add_str' =>
-    $input['private_add_str'], 'private_add_city' =>
+    $input['private_add_str'], 'private_add_zip' =>
+    $input['private_add_zip'], 'private_add_city' =>
     $input['private_add_city'], 'private_tele' =>
-    $input['private_tele'], 'private_mobile' =>
+    $input['private_tele'], 'private_email' =>
+    $input['private_email'], 'private_mobile' =>
     $input['private_mobile'], 'private_fax' =>
     $input['private_fax'], 'company' =>
     $input['company'], 'company_add_str' =>
     $input['company_add_str'], 'company_add_zip' =>
     $input['company_add_zip'], 'company_add_city' =>
     $input['company_add_city'], 'company_tele' =>
-    $input['company_tele'], 'company_fax' =>
+    $input['company_tele'], 'education' =>
+    $input['education'], 'company_fax' =>
     $input['company_fax'], 'company_email'
     =>    $input['company_email'], 'teaching_activities'
     =>    $input['teaching_activities'], 'job_activities'
     =>    $input['job_activities'], 'subject_of_interest' =>
     $input['subject_of_interest']
 ));
+
+redirect(new moodle_url('/local/lecrec/pagespostings.php'));
