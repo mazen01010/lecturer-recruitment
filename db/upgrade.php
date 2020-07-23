@@ -46,7 +46,7 @@ function xmldb_local_lecrec_upgrade($oldversion)
     // Documentation for the XMLDB Editor can be found at:
     // https://docs.moodle.org/dev/XMLDB_editor
 
-    if ($oldversion < 2020062310) {
+    if ($oldversion < 2020062311) {
 
         // Define field sr_course_id to be added to lr_job_postings.
         $table = new xmldb_table('lr_job_postings');
@@ -135,10 +135,23 @@ function xmldb_local_lecrec_upgrade($oldversion)
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
+        $table = new xmldb_table('dg_company');
 
+// Adding fields to table dg_company.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('company_name', XMLDB_TYPE_CHAR, '255', null, null, null, null);
+        $table->add_field('classification', XMLDB_TYPE_CHAR, '8', null, null, null, 'B');
+
+// Adding keys to table dg_company.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+
+// Conditionally launch create table for dg_company.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
 
         // Lecrec savepoint reached.
-        upgrade_plugin_savepoint(true, 2020062310, 'local', 'lecrec');
+        upgrade_plugin_savepoint(true, 2020062311, 'local', 'lecrec');
     }
 
 
