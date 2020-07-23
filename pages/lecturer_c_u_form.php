@@ -1,7 +1,14 @@
 <?php
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $input = filter_input_array(INPUT_POST);
+} else {
+    $input = filter_input_array(INPUT_GET);
+};
+
 require(dirname(dirname(dirname(dirname(__FILE__)))) . '/config.php');
 require_once("$CFG->libdir/formslib.php");
-global $PAGE, $USER;
+global $PAGE, $USER, $DB;
 $PAGE->set_context(context_system::instance());
 $PAGE->set_url('/local/lecrec/pages/lecturer_c_u_form.php');
 $PAGE->set_title('Lecturer Recruitment');
@@ -128,12 +135,51 @@ if ($mform->is_cancelled()) {
     //Handle form cancel operation, if cancel button is present on form
     $url = new moodle_url($CFG->wwwroot . '/local/lecrec/index.php');
     redirect($url);
-
 } else if ($fromform = $mform->get_data()) {
     //In this case you process validated data. $mform->get_data() returns data posted in form.
     print_r($fromform);
 }
 if ($mform->is_submitted()) {
-    //  $DB->insert_record('lr_job_postings',)
+    $data = $mform->get_data();
+    $record = $DB->get_record_select('dg_company', 'company_name = ?', array($data->company));
+    if ($record) {
+        $data->company_id = $record->id;
+        $data->company = $record->company_name;
+    } else {
+        $like = '"' . $data->company . '%"';
+        $record = $DB->get_record_sql("SELECT id , company_name FROM {dg_company} WHERE company_name LIKE $like");
+        if ($record) {
+            $data->company_id = $record->id;
+            $data->company = $record->company_name;
+        } else {
+            $data->company_id = '0';
+        }
+    }
+    $exists = $DB->get_record_select('lr_lecturer', 'firstname = ? AND lastname = ? AND private_mail = ?', array($data->firstname, $data->lastname, $data->private_mail));
+    if ($exists) {
+        echo '<script type="text/javascript">alert("This Record Already Exists")</script>';
+    } else {
+        $DB->insert_record('lr_lecturer', array(
+            'lastname' => $data->lastname, 'firstname' => $data->firstname, 'title' => $data->title, 'dateofbirth' => $data->dateofbirth,
+            'self_employed' => $data->self_employed, 'private_street' => $data->private_street, 'private_postalcode' => $data->private_postalcode, 'private_city' => $data->private_city,
+            'private_state' => $data->private_state, 'private_phonenumber' => $data->private_phonenumber, 'private_cellphone_number' => $data->private_cellphone_number, 'private_mail' => $data->private_mail,
+            'company' => $data->company, 'business_phonenumber' => $data->business_phonenumber, 'business_mail' => $data->business_mail, 'previous_teaching_activities' => $data->previous_teaching_activities,
+            'professional_activities' => $data->professional_activities, 'educational_interest' => $data->educational_interest, 'subject_area' => $data->subject_area, 'dg_company_id' => $data->company_id
+        ));
+    }
 }
+$companies = $DB->get_records('dg_company');
+echo '
+<datalist id="id_companies">';
+foreach ($companies as $company) {
+
+    echo '<option value="' . $company->company_name . '">';
+}
+echo '</datalist>';
+
+?>
+<script>
+    $('#id_company').attr('list', 'id_companies');
+</script>
+<?php
 echo $OUTPUT->footer();

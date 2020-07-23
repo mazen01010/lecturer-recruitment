@@ -46,7 +46,7 @@ function xmldb_local_lecrec_upgrade($oldversion)
     // Documentation for the XMLDB Editor can be found at:
     // https://docs.moodle.org/dev/XMLDB_editor
 
-    if ($oldversion < 2020062311) {
+    if ($oldversion < 2020062312) {
 
         // Define field sr_course_id to be added to lr_job_postings.
         $table = new xmldb_table('lr_job_postings');
@@ -137,21 +137,31 @@ function xmldb_local_lecrec_upgrade($oldversion)
         }
         $table = new xmldb_table('dg_company');
 
-// Adding fields to table dg_company.
+        // Adding fields to table dg_company.
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('company_name', XMLDB_TYPE_CHAR, '255', null, null, null, null);
         $table->add_field('classification', XMLDB_TYPE_CHAR, '8', null, null, null, 'B');
 
-// Adding keys to table dg_company.
+        // Adding keys to table dg_company.
         $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
 
-// Conditionally launch create table for dg_company.
+        // Conditionally launch create table for dg_company.
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
+        // Rename field company on table lr_lecturer to NEWNAMEGOESHERE.
+        $table = new xmldb_table('lr_lecturer');
+        $field = new xmldb_field('company_id', XMLDB_TYPE_INTEGER, 9, null, null, null, null, 'private_mail');
 
+        // Launch rename field company.
+        $dbman->rename_field($table, $field, 'company');
+
+        $field = new xmldb_field('company', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'private_mail');
+
+        // Launch change of type for field company.
+        $dbman->change_field_type($table, $field);
         // Lecrec savepoint reached.
-        upgrade_plugin_savepoint(true, 2020062311, 'local', 'lecrec');
+        upgrade_plugin_savepoint(true, 2020062312, 'local', 'lecrec');
     }
 
 
