@@ -1,5 +1,7 @@
 <?php
 
+use core_customfield\data;
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $input = filter_input_array(INPUT_POST);
 } else {
@@ -21,15 +23,37 @@ echo $OUTPUT->header();
 
 //TODO: add applicant to lecturer pool
 
+if ($input['status'] == 'update') {
+
+    $data = $DB->get_record_select('lr_lecturer', 'id = ?', array($input['ID']));
+
+    $data = array(
+        'lastname' => $data->lastname, 'firstname' => $data->firstname, 'title' => $data->title, 'dateofbirth' => $data->dateofbirth,
+        'self_employed' => $data->self_employed, 'private_street' => $data->private_street, 'private_postalcode' => $data->private_postalcode, 'private_city' => $data->private_city,
+        'private_state' => $data->private_state, 'private_phonenumber' => $data->private_phonenumber, 'private_cellphone_number' => $data->private_cellphone_number, 'private_mail' => $data->private_mail,
+        'company' => $data->company, 'business_phonenumber' => $data->business_phonenumber, 'business_mail' => $data->business_mail, 'previous_teaching_activities' => $data->previous_teaching_activities,
+        'professional_activities' => $data->professional_activities, 'educational_interest' => $data->educational_interest, 'subject_area' => $data->subject_area, 'dg_company_id' => $data->dg_company_id
+    );
+} else {
+    $data = array(
+        'lastname' => '', 'firstname' => null, 'title' => null, 'dateofbirth' => null,
+        'self_employed' => null, 'private_street' => null, 'private_postalcode' => null, 'private_city' => null,
+        'private_state' => null, 'private_phonenumber' => null, 'private_cellphone_number' => null, 'private_mail' => null,
+        'company' => null, 'business_phonenumber' => null, 'business_mail' => null, 'previous_teaching_activities' => null,
+        'professional_activities' => null, 'educational_interest' => null, 'subject_area' => null, 'dg_company_id' => null
+    );
+}
+
+$_SESSION['data'] = $data;
+
 class addlecturer extends moodleform
 {
-
 
     //Add elements to form
     public function definition()
     {
         global $DB;
-
+        $values = (object)$_SESSION['data'];
         $mform = $this->_form; // Don't forget the underscore!
 
 
@@ -38,66 +62,66 @@ class addlecturer extends moodleform
         foreach ($records as $item) {
             $modules[$item->id] = $item->module_name;
         }
-        $mform->addElement('text', 'title', 'Title', 'size="50"')->setValu();
+        $mform->addElement('text', 'title', 'Title', 'size="50"')->setValue($values->title);
         $mform->setType('title', PARAM_NOTAGS);
-        $mform->addElement('text', 'lastname', 'Last Name', 'size="50"')->setValu();
+        $mform->addElement('text', 'lastname', 'Last Name', 'size="50"')->setValue($values->lastname);
         $mform->setType('lastname', PARAM_NOTAGS);
-        $mform->addElement('text', 'firstname', 'First Name', 'size="50"')->setValu();
+        $mform->addElement('text', 'firstname', 'First Name', 'size="50"')->setValue($values->firstname);
         $mform->setType('firstname', PARAM_NOTAGS);
-        $mform->addElement('date_selector', 'dateofbirth', 'Date of Birth ')->setValu();
-        $mform->addElement('advcheckbox', 'self_employed', 'Self Employed', 'Check if self employed', '', array(0, 1))->setValu();
+        $mform->addElement('date_selector', 'dateofbirth', 'Date of Birth ')->setValue($values->dateofbirth);
+        $mform->addElement('advcheckbox', 'self_employed', 'Self Employed', 'Check if self employed', '', array(0, 1))->setValue($data->self_employed);
         $private_address = array();
         $mform->addGroup($private_address, null, 'Private Data', null, false);
-        $mform->addElement('text', 'private_street', 'Street and Nr.', 'size="50"')->setValu();
+        $mform->addElement('text', 'private_street', 'Street and Nr.', 'size="50"')->setValue($values->private_street);
         $mform->setType('private_street', PARAM_NOTAGS);
-        $mform->addElement('text', 'private_postalcode', 'Postal Code', 'size="50"')->setValu();
+        $mform->addElement('text', 'private_postalcode', 'Postal Code', 'size="50"')->setValue($values->private_postalcode);
         $mform->addRule('private_postalcode', null, 'numeric', null, 'client');
         $mform->addRule('private_postalcode', 'Only numbers are allowed', 'required', null, 'client');
         $mform->addRule('private_postalcode', null, 'minlength', 5, 'client');
         $mform->addRule('private_postalcode', null, 'maxlength', 5, 'client');
-        $mform->addElement('text', 'private_city', 'City', 'size="50"')->setValu();
+        $mform->addElement('text', 'private_city', 'City', 'size="50"')->setValue($values->private_city);
         $mform->setType('private_city', PARAM_NOTAGS);
-        $mform->addElement('text', 'private_state', 'State', 'size="50"')->setValu();
+        $mform->addElement('text', 'private_state', 'State', 'size="50"')->setValue($values->private_state);
         $mform->setType('private_state', PARAM_NOTAGS);
-        $mform->addElement('text', 'private_phonenumber', 'Private Phone Number', 'size="50"')->setValu();
+        $mform->addElement('text', 'private_phonenumber', 'Private Phone Number', 'size="50"')->setValue($values->private_phonenumber);
         $mform->addRule('private_phonenumber', null, 'numeric', null, 'client');
         $mform->setType('private_phonenumber', PARAM_NOTAGS);
-        $mform->addElement('text', 'private_cellphone_number', 'Cellphone Number', 'size="50"')->setValu();
+        $mform->addElement('text', 'private_cellphone_number', 'Cellphone Number', 'size="50"')->setValue($values->private_cellphone_number);
         $mform->addRule('private_cellphone_number', null, 'numeric', null, 'client');
         $mform->setType('private_cellphone_number', PARAM_NOTAGS);
-        $mform->addElement('text', 'private_mail', 'Private Email', 'size="50"')->setValu();
+        $mform->addElement('text', 'private_mail', 'Private Email', 'size="50"')->setValue($values->private_mail);
         $mform->addRule('private_mail', null, 'email', null, 'client');
         $business_address = array();
         $mform->addGroup($business_address, null, 'Work Data', null, false);
-        $mform->addElement('text', 'business_street', 'Street and Nr.', 'size="50"')->setValu();
+        $mform->addElement('text', 'business_street', 'Street and Nr.', 'size="50"')->setValue($values->business_street);
         $mform->setType('business_street', PARAM_NOTAGS);
-        $mform->addElement('text', 'business_postalcode', 'Postal Code', 'size="50"')->setValu();
+        $mform->addElement('text', 'business_postalcode', 'Postal Code', 'size="50"')->setValue($values->business_postalcode);
         $mform->addRule('business_postalcode', null, 'numeric', null, 'client');
         $mform->addRule('business_postalcode', 'Only numbers are allowed', 'required', null, 'client');
         $mform->addRule('business_postalcode', null, 'minlength', 5, 'client');
         $mform->addRule('business_postalcode', null, 'maxlength', 5, 'client');
-        $mform->addElement('text', 'business_city', 'City', 'size="50"')->setValu();
+        $mform->addElement('text', 'business_city', 'City', 'size="50"')->setValue($values->business_city);
         $mform->setType('business_city', PARAM_NOTAGS);
-        $mform->addElement('text', 'business_state', 'State', 'size="50"')->setValu();
+        $mform->addElement('text', 'business_state', 'State', 'size="50"')->setValue($values->business_state);
         $mform->setType('business_state', PARAM_NOTAGS);
-        $mform->addElement('text', 'business_phonenumber', 'Work Phone Number', 'size="50"')->setValu();
+        $mform->addElement('text', 'business_phonenumber', 'Work Phone Number', 'size="50"')->setValue($values->business_phonenumber);
         $mform->addRule('business_phonenumber', null, 'numeric', null, 'client');
         $mform->setType('business_phonenumber', PARAM_NOTAGS);
-        $mform->addElement('text', 'company', 'Company Name', 'size="50"')->setValu();
+        $mform->addElement('text', 'company', 'Company Name', 'size="50"')->setValue($values->company);
         $mform->setType('company', PARAM_NOTAGS);
-        $mform->addElement('text', 'business_mail', 'Work Email', 'size="50"')->setValu();
+        $mform->addElement('text', 'business_mail', 'Work Email', 'size="50"')->setValue($values->business_mail);
         $mform->addRule('business_mail', null, 'email', null, 'client');
-        $mform->addElement('textarea', 'previous_teaching_activities', 'Previous Teaching Activities', 'size="50"')->setValu();
+        $mform->addElement('textarea', 'previous_teaching_activities', 'Previous Teaching Activities', 'size="50"')->setValue($values->previous_teaching_activities);
         $mform->setType('previous_teaching_activities', PARAM_NOTAGS);
-        $mform->addElement('textarea', 'professional_activities', 'Professional Activities', 'size="50"')->setValu();
+        $mform->addElement('textarea', 'professional_activities', 'Professional Activities', 'size="50"')->setValue($values->professional_activities);
         $mform->setType('professional_activities', PARAM_NOTAGS);
-        $mform->addElement('textarea', 'educational_interest', 'Educational Interest', 'size="50"')->setValu();
+        $mform->addElement('textarea', 'educational_interest', 'Educational Interest', 'size="50"')->setValue($values->educational_interest);
         $mform->setType('educational_interest', PARAM_NOTAGS);
-        $mform->addElement('text', 'subject_area', 'Subject Area', 'size="50"')->setValu();
+        $mform->addElement('text', 'subject_area', 'Subject Area', 'size="50"')->setValue($values->subject_area);
         $mform->setType('subject_area', PARAM_NOTAGS);
         /*
                 $mform->setType('directorid', PARAM_NOTAGS);
-                $mform->addElement('select', 'module', 'Module', $modules, array('onchange' => 'javascript:loadSubjects();'))->setValu(;
+                $mform->addElement('select', 'module', 'Module', $modules, array('onchange' => 'javascript:loadSubjects();'))->setValue(;
                 $mform->addElement('select', 'subject', 'Subject',); // Add elements to your form
                 $mform->setType('subject', PARAM_NOTAGS);                   //Set type of element
 
@@ -112,7 +136,7 @@ class addlecturer extends moodleform
 
                 $mform->addElement('text', 'emailcontactperson', 'E-Mail Contact Person', 'size="50"');
                 $mform->setType('emailcontactperson', PARAM_NOTAGS);*/
-
+        unset($_SESSION['data']);
         $buttonarray = array();
         $buttonarray[] = $mform->createElement('submit', 'submitbutton', 'Save');
         $buttonarray[] = $mform->createElement('cancel');
@@ -128,7 +152,9 @@ class addlecturer extends moodleform
 
 
 $mform = new addlecturer();
+$mform->values = $data;
 $mform->display();
+
 
 
 if ($mform->is_cancelled()) {

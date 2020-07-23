@@ -92,7 +92,7 @@ if (has_capability('local/lecrec:manager', $context)) {
 
                     $(this).removeClass('active');
                 }).click(function() {
-                var ID = $(this).attr('record_id');
+                var ID = $(this).parent().attr('record_id');
                 redirectUrl = 'lecturer_c_u_form.php';
                 var form = $('<form action="' + redirectUrl + '" method="post">' +
                     '<input type="hidden" name="ID" value="' + ID + '"></input>' +
