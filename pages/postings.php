@@ -86,7 +86,6 @@ echo ' <header>
 <label for="subject_of_interest">Subject Of Interest</label><input type="text" name="subject_of_interest" id="subject_of_interest" />
 <br class="clear" /> 
 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Absenden</button>
-<div id="lr_job_postings_id" name="lr_job_postings_id" hidden>' . $rowID . '</div>
+<input type="hidden" id="lr_job_postings_id" value="' . $rowID . '" name="lr_job_postings_id">
 </div>
 </form>';
-?>
