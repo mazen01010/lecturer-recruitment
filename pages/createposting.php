@@ -20,7 +20,7 @@ class createposting extends moodleform
     //Add elements to form
     public function definition()
     {
-        global $DB, $USER;
+        global $DB;
 
         $mform = $this->_form; // Don't forget the underscore!
 
@@ -54,6 +54,11 @@ class createposting extends moodleform
         $mform->setType('contactperson', PARAM_NOTAGS);
 
         $mform->addElement('text', 'emailcontactperson', 'E-Mail Contact Person', 'size="50"');
+        $mform->addRule('emailcontactperson', null, 'email',null, 'client');
+        $mform->setType('emailcontactperson', PARAM_NOTAGS);
+
+        $mform->addElement('text', 'phonecontactperson', 'Contact Person Phone', 'size="50"');
+        $mform->addRule('phonecontactperson', null, 'numeric',null, 'client');
         $mform->setType('emailcontactperson', PARAM_NOTAGS);
 
         $mform->addElement('text', 'expected_hours', 'Expected Hours', 'size="50"');
@@ -94,7 +99,7 @@ if ($mform->is_submitted()) {
     $data = $mform->get_data();
     $data->lr_subjects_id = $DB->get_record_select('lr_subjects', 'lr_module_id = ? AND lr_subject_name = ?', array($data->module, $_POST['subject']))->id;
     $data->description = $DB->get_record_select('lr_subjects', 'lr_module_id = ? AND lr_subject_name = ?', array($data->module, $_POST['subject']))->lr_description;
-    $DB->insert_record('lr_job_postings', array(
+    $DB->insert_record('lr_job_postings', (object)array(
         'external' => $data->external,
         'description' => $data->description,
         'expected_hours' => $data->expected_hours,
@@ -137,7 +142,7 @@ if ($mform->is_submitted()) {
             },
             error: function(error) {}
         })
-    };
+    }
 
     function loadContent() {
         var module_id = $('#id_module option:selected').val();
@@ -162,7 +167,7 @@ if ($mform->is_submitted()) {
             },
             error: function(error) {}
         })
-    };
+    }
 </script>
 
 <?php
