@@ -1,14 +1,14 @@
 <?php
 
 
-require(dirname(dirname(dirname(dirname(__FILE__)))) . '/config.php');
+require(dirname(__FILE__, 4) . '/config.php');
 require_login();
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input = filter_input_array(INPUT_POST);
 } else {
     $input = filter_input_array(INPUT_GET);
-};
+}
 
 $RecordID = $input['RecordID'];
 
@@ -16,6 +16,8 @@ global $DB, $PAGE, $OUTPUT, $CFG, $USER;
 
 $PAGE->set_context(context_system::instance());
 $PAGE->set_url('/local/lecrec/pages/recruitmentprocess.php');
+$PAGE->requires->jquery();
+$PAGE->requires->css('/local/lecrec/assets/CSS/application.css');
 $PAGE->set_title('Lecturer Applications');
 $context = context_system::instance();
 $user = $USER->id;
@@ -30,9 +32,55 @@ if (has_capability('local/lecrec:manager', $context)) {
     echo $OUTPUT->heading('Application');
     $record = $DB->get_record('lr_application', array('id' => $RecordID));
 
+
+
+
 }
 //$record->status_of_application
 echo html_writer::tag('br', '');
+echo "<div id='tracking' class=\"card\">
+        <div class=\"row d-flex justify-content-between px-3 top\">
+            <div class=\"d-flex\">
+                <h5>ORDER <span class=\"text-primary font-weight-bold\">#Y34XDHR</span></h5>
+            </div>
+            <div class=\"d-flex flex-column text-sm-right\">
+                <p class=\"mb-0\">Last Update: <span>" . date('d.m.Y H:i', $record->timemodified) . "</span></p>
+                <p>USPS <span class=\"font-weight-bold\">234094567242423422898</span></p>
+            </div>
+        </div> <!-- Add class 'active' to progress -->
+        <div class=\"row d-flex justify-content-center\">
+            <div class=\"col-12\">
+                <ul id=\"progressbar\" class=\"text-center\">
+                    <li class=\"active step0\"></li>
+                    <li class=\"active step0\"></li>
+                    <li class=\"active step0\"></li>
+                    <li class=\"step0\"></li>
+                </ul>
+            </div>
+        </div>
+        <div class=\"row justify-content-between top\">
+            <div class=\"row d-flex icon-content\"> <img class=\"icon\" src=\"../assets/images/005-resume.svg\">
+                <div class=\"d-flex flex-column\">
+                    <p class=\"font-weight-bold\">Application<br>received</p>
+                </div>
+            </div>
+            <div class=\"row d-flex icon-content\"> <img class=\"icon\" src=\"../assets/images/007-chronometer-1.svg\">
+                <div class=\"d-flex flex-column\">
+                    <p class=\"font-weight-bold\">Waiting to <br>interview</p>
+                </div>
+            </div>
+            <div class=\"row d-flex icon-content\"> <img class=\"icon\" src=\"../assets/images/008-job-interview.svg\">
+                <div class=\"d-flex flex-column\">
+                    <p class=\"font-weight-bold\">Interviewed</p>
+                </div>
+            </div>
+            <div class=\"row d-flex icon-content\"> <img class=\"icon\" src=\"https://i.imgur.com/HdsziHP.png\">
+                <div class=\"d-flex flex-column\">
+                    <p class=\"font-weight-bold\">Order<br>Arrived</p>
+                </div>
+            </div>
+        </div>
+    </div>";
 echo html_writer::start_div('');
 echo html_writer::start_div('card');
 echo html_writer::start_div('card-header');

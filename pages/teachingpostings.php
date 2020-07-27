@@ -1,6 +1,6 @@
 <?php
 
-require(dirname(dirname(dirname(dirname(__FILE__)))) . '/config.php');
+require(dirname(__FILE__, 4) . '/config.php');
 include('../tables/tableteachingpostings.php');
 
 
@@ -8,7 +8,6 @@ $PAGE->set_title('Lecturer Recruitment');
 $PAGE->set_context(context_system::instance());
 $PAGE->set_url('/local/lecrec/pages/teachingpostings.php');
 $PAGE->set_title('Lecturer Recruitment');
-$PAGE->requires->css('/local/lecrec/assets/css/bewerber.css');
 $PAGE->requires->css('/local/lecrec/assets/css/jquery.dataTables.min.css');
 $PAGE->requires->jquery();
 $PAGE->requires->js('/local/lecrec/assets/js/jquery.dataTables.min.js', true);
@@ -60,7 +59,7 @@ foreach ($records as $record) {
     $row->cells = array($cell1, $cell2, $cell3, $cell4, $cell5);
     $table->rowclasses[$record->id] = '';
     $table->data[] = $row;
-};
+}
 
 echo html_writer::table($table);
 
@@ -72,7 +71,7 @@ echo html_writer::table($table);
             $(this).css('cursor', 'pointer').click(function() {
                 var ID = $(this).parent().children(":first").html();
                 var rowID = $(this).parent().attr('RecordID');
-                redirectUrl = 'postings.php';
+                redirectUrl = 'application.php';
                 var form = $('<form action="' + redirectUrl + '" method="post">' +
                     '<input type="hidden" name="rowID" value="' + rowID + '"></input>' +
                     '<input type="hidden" name="ID" value="' + ID + '"></input>' + '</form>');

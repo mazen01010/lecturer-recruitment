@@ -1,9 +1,9 @@
 <?php
 
-require(dirname(dirname(dirname(dirname(__FILE__)))) . '/config.php');
+require(dirname(__FILE__, 4) . '/config.php');
 require_once("$CFG->libdir/formslib.php");
 global $PAGE, $DB;
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input = filter_input_array(INPUT_POST);
 } else {
     $input = filter_input_array(INPUT_GET);
@@ -18,7 +18,6 @@ if(!isset($_SESSION['$rowID'] )){
 $PAGE->set_context(context_system::instance());
 $PAGE->set_url('/local/lecrec/pages/teachingpostings.php');
 $PAGE->set_title('Lecturer Recruitment');
-//$PAGE->requires->css('/local/lecrec/assets/css/bewerber.css');
 echo $OUTPUT->header();
 echo $OUTPUT->heading('Bewerberformular für ' . $name . '');
 $PAGE->requires->jquery();
@@ -214,7 +213,6 @@ if ($mform->is_cancelled()) {
     redirect($url);
 } else if ($fromform = $mform->get_data()) {
     //In this case you process validated data. $mform->get_data() returns data posted in form.
-    print_r($fromform);
 }
 
 if ($mform->is_submitted()) {
@@ -239,6 +237,7 @@ if ($mform->is_submitted()) {
         'company_email' => $input['business_mail'], 'teaching_activities' => $input['previous_teaching_activities'],
         'job_activities' => $input['professional_activities'], 'subject_of_interest' => $input['subject_area'],
         'timecreated' => time(),
+        'timemodified' => time(),
         'status_of_application' => 'Applied'
 
     ));
