@@ -17,7 +17,9 @@ global $DB, $PAGE, $OUTPUT, $CFG, $USER;
 $PAGE->set_context(context_system::instance());
 $PAGE->set_url('/local/lecrec/pages/recruitmentprocess.php');
 $PAGE->set_title('Lecturer Applications');
+$PAGE->requires->css('/local/lecrec/assets/css/jquery.dataTables.min.css');
 $PAGE->requires->jquery();
+$PAGE->requires->js('/local/lecrec/assets/js/jquery.dataTables.min.js', true);
 $context = context_system::instance();
 $user = $USER->id;
 
@@ -29,7 +31,7 @@ if (has_capability('local/lecrec:manager', $context)) {
 
     echo $OUTPUT->header();
     echo $OUTPUT->heading('Lecturer Applications');
-
+    echo '<br>';
 
 
     $table = new html_table();
@@ -37,15 +39,14 @@ if (has_capability('local/lecrec:manager', $context)) {
     $table->attributes['class'] = 'table table-sm ';
 
     $records = $DB->get_records_select("lr_application", 'lr_job_postings_id = ? AND closed = 0', array($RecordID));
-    $table->head = array('Name', 'company', 'Education');
-    $table->align = array('left', 'left', 'left');
+    $table->head = array('Name', 'company', 'Education', 'Application Status');
+    $table->align = array('left', 'left', 'left', 'left');
 
 
 
 
     foreach ($records as $record) {
 
-        // $table->data[] = array($record->id, $record->first_name, $record->last_name, $record->date_of_birth, $record->private_email, $record->timecreated, $record->contract_status);
         $row = new html_table_row();
 
         $row->attributes['RecordID'] = $record->id;
@@ -58,8 +59,11 @@ if (has_capability('local/lecrec:manager', $context)) {
         $cell2 = new html_table_cell();
         $cell2->text = $record->education;
 
+        $cell3 = new html_table_cell();
+        $cell3->text = $record->status_of_application;
 
-        $row->cells  = array($cell0, $cell1, $cell2);
+
+        $row->cells  = array($cell0, $cell1, $cell2, $cell3);
 
         $table->data[]  = $row;
     };
@@ -102,5 +106,9 @@ if (has_capability('local/lecrec:manager', $context)) {
 
             });
         });
+    });
+
+    $(document).ready(function() {
+        $('#my_table').DataTable();
     });
 </script>
