@@ -60,7 +60,7 @@ if(has_capability('local/lecrec:manager', $context)){
     $tilestp->setButtonURL(new moodle_url('/local/lecrec/pages/teachingpostings.php'));
 
     $tilestest = new CreateTile();
-    $tilestest->setTitle('Test');
+    $tilestest->setTitle('Create New Posting');
     $tilestest->setButtonName('Go To');
     $tilestest->setButtonURL(new moodle_url('/local/lecrec/pages/createposting.php'));
 

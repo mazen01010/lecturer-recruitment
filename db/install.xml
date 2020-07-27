@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/lecrec/db" VERSION="20200723" COMMENT="XMLDB file for Moodle local/lecrec"
+<XMLDB PATH="local/lecrec/db" VERSION="20200725" COMMENT="XMLDB file for Moodle local/lecrec"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -82,10 +82,14 @@
         <FIELD NAME="cp_email" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="cp_phone" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="sr_course_id" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="usermodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="pk" TYPE="primary" FIELDS="id"/>
         <KEY NAME="fk_lr_subjects_id" TYPE="foreign" FIELDS="lr_subjects_id" REFTABLE="lr_subjects" REFFIELDS="id"/>
+        <KEY NAME="usermodified" TYPE="foreign" FIELDS="usermodified" REFTABLE="user" REFFIELDS="id"/>
       </KEYS>
     </TABLE>
     <TABLE NAME="lr_posting_assignment" COMMENT="lr_lecturer_posting_assignment table retrofitted from MySQL">
@@ -108,7 +112,6 @@
         <FIELD NAME="lr_job_postings_id" TYPE="int" LENGTH="11" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="fname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="lname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
-        <FIELD NAME="email" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="title" TYPE="char" LENGTH="45" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="date_of_birth" TYPE="datetime" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="place_of_birth" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
@@ -131,10 +134,14 @@
         <FIELD NAME="teaching_activities" TYPE="char" LENGTH="455" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="job_activities" TYPE="char" LENGTH="455" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="subject_of_interest" TYPE="char" LENGTH="455" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="usermodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="pk" TYPE="primary" FIELDS="id"/>
         <KEY NAME="fk_lr_job_postings_id" TYPE="foreign" FIELDS="lr_job_postings_id" REFTABLE="lr_job_postings" REFFIELDS="id"/>
+        <KEY NAME="usermodified" TYPE="foreign" FIELDS="usermodified" REFTABLE="user" REFFIELDS="id"/>
       </KEYS>
     </TABLE>
     <TABLE NAME="sr_study_programs" COMMENT="sr_study_programs table retrofitted from MySQL">
