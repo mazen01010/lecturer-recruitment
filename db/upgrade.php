@@ -46,7 +46,7 @@ function xmldb_local_lecrec_upgrade($oldversion)
     // Documentation for the XMLDB Editor can be found at:
     // https://docs.moodle.org/dev/XMLDB_editor
 
-    if ($oldversion < 2020062312) {
+    if ($oldversion < 2020062313) {
 
         // Define field sr_course_id to be added to lr_job_postings.
         $table = new xmldb_table('lr_job_postings');
@@ -158,10 +158,67 @@ function xmldb_local_lecrec_upgrade($oldversion)
 
         $field = new xmldb_field('company', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'private_mail');
 
-        // Launch change of type for field company.
+//         Launch change of type for field company.
         $dbman->change_field_type($table, $field);
-        // Lecrec savepoint reached.
-        upgrade_plugin_savepoint(true, 2020062312, 'local', 'lecrec');
+//         Lecrec savepoint reached.
+        $table = new xmldb_table('lr_application');
+        $field = new xmldb_field('email');
+
+
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+        $table = new xmldb_table('lr_application');
+        $field = new xmldb_field('usermodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'subject_of_interest');
+
+        // Conditionally launch add field usermodified.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        // Define field timecreated to be added to lr_application.
+        $table = new xmldb_table('lr_application');
+        $field = new xmldb_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'usermodified');
+
+        // Conditionally launch add field timecreated.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Define field timemodified to be added to lr_application.
+        $table = new xmldb_table('lr_application');
+        $field = new xmldb_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'timecreated');
+
+        // Conditionally launch add field timemodified.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        $table = new xmldb_table('lr_job_postings');
+        $field = new xmldb_field('usermodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', null);
+
+        // Conditionally launch add field usermodified.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        // Define field timecreated to be added to lr_job_postings.
+        $table = new xmldb_table('lr_job_postings');
+        $field = new xmldb_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'usermodified');
+
+        // Conditionally launch add field timecreated.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Define field timemodified to be added to lr_job_postings.
+        $table = new xmldb_table('lr_job_postings');
+        $field = new xmldb_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'timecreated');
+
+        // Conditionally launch add field timemodified.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+
+        upgrade_plugin_savepoint(true, 2020062313, 'local', 'lecrec');
     }
 
 
