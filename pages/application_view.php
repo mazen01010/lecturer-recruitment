@@ -34,14 +34,13 @@ if (has_capability('local/lecrec:manager', $context)) {
 
 
 
-
 }
 //$record->status_of_application
 echo html_writer::tag('br', '');
 echo "<div id='tracking' class=\"card\">
         <div class=\"row d-flex justify-content-between px-3 top\">
             <div class=\"d-flex\">
-                <h5>ORDER <span class=\"text-primary font-weight-bold\">#Y34XDHR</span></h5>
+                <h5><span class=\"text-primary\"> ". $record->title . ' ' . $record->fname . ' ' . $record->lname. "</span></h5>
             </div>
             <div class=\"d-flex flex-column text-sm-right\">
                 <p class=\"mb-0\">Last Update: <span>" . date('d.m.Y H:i', $record->timemodified) . "</span></p>

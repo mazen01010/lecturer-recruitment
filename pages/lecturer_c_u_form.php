@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $input = filter_input_array(INPUT_GET);
 };
 
-require(dirname(dirname(dirname(dirname(__FILE__)))) . '/config.php');
+require(dirname(__FILE__, 4) . '/config.php');
 require_once("$CFG->libdir/formslib.php");
 global $PAGE, $USER, $DB;
 $PAGE->set_context(context_system::instance());
