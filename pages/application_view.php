@@ -31,16 +31,13 @@ if (has_capability('local/lecrec:manager', $context)) {
     echo $OUTPUT->header();
     echo $OUTPUT->heading('Application');
     $record = $DB->get_record('lr_application', array('id' => $RecordID));
-
-
-
 }
 //$record->status_of_application
 echo html_writer::tag('br', '');
 echo "<div id='tracking' class=\"card\">
         <div class=\"row d-flex justify-content-between px-3 top\">
             <div class=\"d-flex\">
-                <h5><span class=\"text-primary\"> ". $record->title . ' ' . $record->fname . ' ' . $record->lname. "</span></h5>
+                <h5><span class=\"text-primary\"> " . $record->title . ' ' . $record->fname . ' ' . $record->lname . "</span></h5>
             </div>
             <div class=\"d-flex flex-column text-sm-right\">
                 <p class=\"mb-0\">Last Update: <span>" . date('d.m.Y H:i', $record->timemodified) . "</span></p>
@@ -165,4 +162,25 @@ echo html_writer::end_div();
 echo html_writer::end_div();
 echo html_writer::end_div();
 echo html_writer::end_div();
+
+
+if ($record->status_of_application == 'Interview sent') {
+    echo '<br><form action="../assets/PHPFunctions/respond_to_application.php" method="post">
+<div class="row mx-auto">
+<input name="app_id" value="' . $RecordID . '" hidden>
+<input type ="submit" name="approve" class="btn btn-success" value="Approve">
+<input type ="submit" name="qualify" class="btn btn-info" value="New interview">
+<input type ="submit" name="reject" class="btn btn-danger" value="Reject">
+</div>
+</from>';
+} else {
+    echo '<br><form action="../assets/PHPFunctions/respond_to_application.php" method="post">
+<div class="row mx-auto">
+<input name="app_id" value="' . $RecordID . '" hidden>
+<input type ="submit" name="qualify" class="btn btn-success" value="Qualify to interview">
+<input type ="submit" name="reject" class="btn btn-danger" value="Reject">
+</div>
+</from>';
+}
+
 echo $OUTPUT->footer();

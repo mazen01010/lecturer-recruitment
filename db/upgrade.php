@@ -150,17 +150,17 @@ function xmldb_local_lecrec_upgrade($oldversion)
             $dbman->create_table($table);
         }
         // Rename field company on table lr_lecturer to NEWNAMEGOESHERE.
-        $table = new xmldb_table('lr_lecturer');
-        $field = new xmldb_field('company_id', XMLDB_TYPE_INTEGER, 9, null, null, null, null, 'private_mail');
+        //  $table = new xmldb_table('lr_lecturer');
+        //$field = new xmldb_field('company_id', XMLDB_TYPE_INTEGER, 9, null, null, null, null, 'private_mail');
 
         // Launch rename field company.
-        $dbman->rename_field($table, $field, 'company');
+        // $dbman->rename_field($table, $field, 'company');
 
-        $field = new xmldb_field('company', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'private_mail');
+        // $field = new xmldb_field('company', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'private_mail');
 
-//         Launch change of type for field company.
-        $dbman->change_field_type($table, $field);
-//         Lecrec savepoint reached.
+        //         Launch change of type for field company.
+        //  $dbman->change_field_type($table, $field);
+        //         Lecrec savepoint reached.
         $table = new xmldb_table('lr_application');
         $field = new xmldb_field('email');
 
@@ -219,6 +219,57 @@ function xmldb_local_lecrec_upgrade($oldversion)
 
 
         upgrade_plugin_savepoint(true, 2020062313, 'local', 'lecrec');
+    }
+
+    if ($oldversion < 2020062314) {
+
+        // Define field interview_date to be added to lr_application.
+        $table = new xmldb_table('lr_application');
+        $field = new xmldb_field('interview_date', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'timemodified');
+
+        // Conditionally launch add field interview_date.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Define field interview_street to be added to lr_application.
+        $table = new xmldb_table('lr_application');
+        $field = new xmldb_field(
+            'interview_street',
+            XMLDB_TYPE_CHAR,
+            '255',
+            null,
+            null,
+            null,
+            null,
+            'interview_date'
+        );
+
+        // Conditionally launch add field interview_street.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Define field interview_city to be added to lr_application.
+        $table = new xmldb_table('lr_application');
+        $field = new xmldb_field('interview_city', XMLDB_TYPE_CHAR, '45', null, null, null, null, 'interview_street');
+
+        // Conditionally launch add field interview_city.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        // Define field interview_city_zip to be added to lr_application.
+        $table = new xmldb_table('lr_application');
+        $field = new xmldb_field('interview_city_zip', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'interview_city');
+
+        // Conditionally launch add field interview_city_zip.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+
+        // Lecrec savepoint reached.
+        upgrade_plugin_savepoint(true, 2020062314, 'local', 'lecrec');
     }
 
 
