@@ -272,7 +272,7 @@ function xmldb_local_lecrec_upgrade($oldversion)
         upgrade_plugin_savepoint(true, 2020062314, 'local', 'lecrec');
     }
 
-    if ($oldversion < XXXXXXXXXX) {
+    if ($oldversion < 2020062315) {
 
         // Changing type of field private_tele on table lr_application to int.
         $table = new xmldb_table('lr_application');
@@ -282,7 +282,7 @@ function xmldb_local_lecrec_upgrade($oldversion)
         $dbman->change_field_type($table, $field);
 
         // Lecrec savepoint reached.
-        upgrade_plugin_savepoint(true, XXXXXXXXXX, 'local', 'lecrec');
+
 
         // Changing type of field private_mobile on table lr_application to int.
         $table = new xmldb_table('lr_application');
@@ -327,9 +327,9 @@ function xmldb_local_lecrec_upgrade($oldversion)
         // Launch change of type for field business_phonenumber.
         $dbman->change_field_type($table, $field);
 
+        upgrade_plugin_savepoint(true, 2020062315, 'local', 'lecrec');
+
     }
-
-
 
     return true;
 }
