@@ -45,10 +45,10 @@ class createposting extends moodleform
         $mform->addElement('select', 'course', 'course', $course); // Add elements to your form
         $mform->setType('course', PARAM_NOTAGS);   //Set type of element
 
-        $mform->addElement('advcheckbox', 'external', 'External', 'Check if posting is open for external applications', '', array(0, 1));
+        $mform->addElement('select', 'semester', 'Semester', ['sose1'=>'Summer Semester A' , 'sose2'=>'Summer Semester B' , 'wise1' => 'Winter Semester A', 'wise2' => 'Winter Semester B'] ); // Add elements to your form
+        $mform->setType('course', PARAM_NOTAGS);   //Set type of element
 
-        $mform->addElement('date_selector', 'startdate', 'Start Date');
-        $mform->addElement('date_selector', 'enddate', 'End Date');
+        $mform->addElement('advcheckbox', 'external', 'External', 'Check if posting is open for external applications', '', array(0, 1));
 
         $mform->addElement('text', 'contactperson', 'Contact Person', 'size="50"');
         $mform->setType('contactperson', PARAM_NOTAGS);
@@ -64,12 +64,11 @@ class createposting extends moodleform
         $mform->addElement('text', 'expected_hours', 'Expected Hours', 'size="50"');
         $mform->setType('expected_hours', PARAM_NOTAGS);
 
-        $mform->addElement('textarea', 'description', 'Description');
+        $mform->addElement('textarea', 'description', 'Description' ,'wrap="virtual" rows="8" cols="70"');
         $mform->setType('description', PARAM_NOTAGS);
 
         $buttonarray = array();
         $buttonarray[] = $mform->createElement('submit', 'submitbutton', 'Save');
-        $buttonarray[] = $mform->createElement('reset', 'resetbutton', 'Revert');
         $buttonarray[] = $mform->createElement('cancel');
         $mform->addGroup($buttonarray, 'buttonar', '', ' ', false);
     }
@@ -91,37 +90,41 @@ if ($mform->is_cancelled()) {
     //Handle form cancel operation, if cancel button is present on form
     $url = new moodle_url($CFG->wwwroot . '/local/lecrec/index.php');
     redirect($url);
-} else if ($fromform = $mform->get_data()) {
-    //In this case you process validated data. $mform->get_data() returns data posted in form.
-    print_r($fromform);
 }
 if ($mform->is_submitted()) {
+
     $data = $mform->get_data();
+    if($data->semester == 'sose1'){
+        $start_date = date("Y").'-05-01 00:00:00';
+        $end_date= date("Y").'-08-01 00:00:00';
+    }elseif ($data->semester == 'sose2'){
+        $start_date= date("Y").'-06-01 00:00:00';
+        $end_date   = date("Y").'-09-01 00:00:00';
+    }elseif ($data->semester == 'wise1'){
+        $start_date= date("Y").'-10-01 00:00:00';
+        $end_date= date("Y+1").'-01-01 00:00:00';
+    }else{
+        $start_date= date("Y").'-11-01 00:00:00';
+        $end_date= date("Y+1").'-02-01 00:00:00';
+    }
     $data->lr_subjects_id = $DB->get_record_select('lr_subjects', 'lr_module_id = ? AND lr_subject_name = ?', array($data->module, $_POST['subject']))->id;
     $data->description = $DB->get_record_select('lr_subjects', 'lr_module_id = ? AND lr_subject_name = ?', array($data->module, $_POST['subject']))->lr_description;
-    $DB->insert_record('lr_job_postings', (object)array(
+    $DB->insert_record('lr_job_postings', array(
         'external' => $data->external,
         'description' => $data->description,
         'expected_hours' => $data->expected_hours,
         'lr_subjects_id' => $data->lr_subjects_id,
-        'start_date' => date("Y-m-d H:i:s", $data->startdate),
-        'end_date' => date("Y-m-d H:i:s", $data->enddate),
+        'start_date' => $start_date,
+        'end_date' => $end_date,
         'director_id' => $user,
         'cp_name' => $data->contactperson,
         'cp_email' => $data->emailcontactperson,
-        'sr_course_id' => $data->course
+        'sr_course_id' => $data->course,
+        'timecreated' => time(),
+        'usermodified' => $user
     ));
-};
-/*else {
-    // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
-    // or on the first display of the form.
-
-    //Set default data (if any)
-    $mform->set_data($toform);
-    //displays the form
-    $mform->display();
+    redirect(new moodle_url('/local/lecrec/index.php'));
 }
-*/
 ?>
 <script>
     function loadSubjects() {
@@ -168,6 +171,7 @@ if ($mform->is_submitted()) {
             error: function(error) {}
         })
     }
+
 </script>
 
 <?php

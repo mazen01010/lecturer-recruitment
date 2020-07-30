@@ -16,16 +16,11 @@ echo $OUTPUT->heading('DHBW Mannheim Postings');
 $context = context_system::instance();
 $user = $USER->id;
 echo '</br>';
-if (has_capability('local/lecrec:manager', $context)) {
-}
-
-if (isguestuser()) {
-}
 
 $table = new html_table();
 $table->id = 'postings';
 //$table->attributes['class'] = 'table table-striped table-xl';
-$records = $DB->get_records_select("lr_job_postings", '');
+$records = $DB->get_records_select("lr_job_postings", 'closed = ?', array('0'));
 
 $table->head = array('Vorlesung', 'Beschreibung', 'Qualifikation', 'Bedarf', 'Stunden pro Semester');
 $table->align = array('center', 'center', 'center', 'center', 'center');
@@ -71,7 +66,7 @@ echo html_writer::table($table);
             $(this).css('cursor', 'pointer').click(function() {
                 var ID = $(this).parent().children(":first").html();
                 var rowID = $(this).parent().attr('RecordID');
-                redirectUrl = 'application.php';
+                redirectUrl = 'posting_view.php';
                 var form = $('<form action="' + redirectUrl + '" method="post">' +
                     '<input type="hidden" name="rowID" value="' + rowID + '"></input>' +
                     '<input type="hidden" name="ID" value="' + ID + '"></input>' + '</form>');

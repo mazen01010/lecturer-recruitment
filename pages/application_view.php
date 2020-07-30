@@ -32,6 +32,19 @@ if (has_capability('local/lecrec:manager', $context)) {
     echo $OUTPUT->heading('Application');
     $record = $DB->get_record('lr_application', array('id' => $RecordID));
 }
+if ($record->status_of_application === 'Waiting to interview') {
+    $waiting = 'active';
+} elseif ($record->status_of_application === 'Interviewed') {
+    $waiting = 'active';
+    $interviewed = 'active';
+} elseif ($record->status_of_application === 'Accepted') {
+    $waiting = 'active';
+    $interviewsent= 'active';
+    $interviewed = 'active';
+    $accepted = 'active';
+} elseif ($record->status_of_application === 'Invitation sent') {
+    $interviewsent = 'active';
+}
 //$record->status_of_application
 echo html_writer::tag('br', '');
 echo "<div id='tracking' class=\"card\">
@@ -40,17 +53,18 @@ echo "<div id='tracking' class=\"card\">
                 <h5><span class=\"text-primary\"> " . $record->title . ' ' . $record->fname . ' ' . $record->lname . "</span></h5>
             </div>
             <div class=\"d-flex flex-column text-sm-right\">
+                 <p>Application received on: <span >" . date('d.m.Y H:i', $record->timecreated) . "</span></p>
                 <p class=\"mb-0\">Last Update: <span>" . date('d.m.Y H:i', $record->timemodified) . "</span></p>
-                <p>USPS <span class=\"font-weight-bold\">234094567242423422898</span></p>
             </div>
         </div> <!-- Add class 'active' to progress -->
         <div class=\"row d-flex justify-content-center\">
             <div class=\"col-12\">
                 <ul id=\"progressbar\" class=\"text-center\">
                     <li class=\"active step0\"></li>
-                    <li class=\"active step0\"></li>
-                    <li class=\"active step0\"></li>
-                    <li class=\"step0\"></li>
+                    <li class=\"" . $interviewsent . " step0\"></li>
+                    <li class=\"" . $waiting . " step0\"></li> 
+                    <li class=\"" . $interviewed . " step0\"></li>
+                    <li class=\"" . $accepted . " step0\"></li>
                 </ul>
             </div>
         </div>
@@ -58,6 +72,11 @@ echo "<div id='tracking' class=\"card\">
             <div class=\"row d-flex icon-content\"> <img class=\"icon\" src=\"../assets/images/005-resume.svg\">
                 <div class=\"d-flex flex-column\">
                     <p class=\"font-weight-bold\">Application<br>received</p>
+                </div>
+            </div> 
+            <div class=\"row d-flex icon-content\"> <img class=\"icon\" src=\"../assets/images/mail-send.svg\">
+                <div class=\"d-flex flex-column\">
+                    <p class=\"font-weight-bold\">Invitation<br>sent </p>
                 </div>
             </div>
             <div class=\"row d-flex icon-content\"> <img class=\"icon\" src=\"../assets/images/007-chronometer-1.svg\">
@@ -70,9 +89,9 @@ echo "<div id='tracking' class=\"card\">
                     <p class=\"font-weight-bold\">Interviewed</p>
                 </div>
             </div>
-            <div class=\"row d-flex icon-content\"> <img class=\"icon\" src=\"https://i.imgur.com/HdsziHP.png\">
+            <div class=\"row d-flex icon-content\"> <img class=\"icon\" src=\"../assets/images/010-mail.svg\">
                 <div class=\"d-flex flex-column\">
-                    <p class=\"font-weight-bold\">Order<br>Arrived</p>
+                    <p class=\"font-weight-bold\">Applicant<br>accepted</p>
                 </div>
             </div>
         </div>
@@ -162,9 +181,9 @@ echo html_writer::end_div();
 echo html_writer::end_div();
 echo html_writer::end_div();
 echo html_writer::end_div();
+//TODO connect with camunda to qualify there
 
-
-if ($record->status_of_application == 'Interview sent') {
+if ($record->status_of_application == 'Invitation sent') {
     echo '<br><form action="../assets/PHPFunctions/respond_to_application.php" method="post">
 <div class="row mx-auto">
 <input name="app_id" value="' . $RecordID . '" hidden>
@@ -173,11 +192,19 @@ if ($record->status_of_application == 'Interview sent') {
 <input type ="submit" name="reject" class="btn btn-danger" value="Reject">
 </div>
 </from>';
-} else {
+} else if ($record->status_of_application == 'Applied'){
     echo '<br><form action="../assets/PHPFunctions/respond_to_application.php" method="post">
 <div class="row mx-auto">
 <input name="app_id" value="' . $RecordID . '" hidden>
 <input type ="submit" name="qualify" class="btn btn-success" value="Qualify to interview">
+<input type ="submit" name="reject" class="btn btn-danger" value="Reject">
+</div>
+</from>';
+}else if($record->status_of_application =='Waiting to interview'){
+    echo '<br><form action="../assets/PHPFunctions/respond_to_application.php" method="post">
+<div class="row mx-auto">
+<input name="app_id" value="' . $RecordID . '" hidden>
+<input type ="submit" name="qualify" class="btn btn-info" value="New interview">
 <input type ="submit" name="reject" class="btn btn-danger" value="Reject">
 </div>
 </from>';
