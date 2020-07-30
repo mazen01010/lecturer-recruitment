@@ -73,10 +73,7 @@ echo html_writer::end_div();
 echo html_writer::end_div();
 echo html_writer::end_div();
 echo html_writer::end_div();
-echo html_writer::start_div('');
-echo html_writer::start_div('card');
-echo html_writer::start_div('card-header');
-echo html_writer::start_tag('a', array('class' => 'card-link', 'data-toggle' => "collapse", 'href' => "#work-info"));
+
 
 
     echo '<br><form action="application.php" method="post">

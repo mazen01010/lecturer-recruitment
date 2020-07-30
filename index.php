@@ -40,7 +40,6 @@ $context = context_system::instance();
 
 if(has_capability('local/lecrec:manager', $context)){
 
-
     $PAGE->set_heading('Lecturer Recruitment');
     echo $OUTPUT->header();
 
